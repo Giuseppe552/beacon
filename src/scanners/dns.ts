@@ -16,7 +16,10 @@ export const dnsScanner: Scanner = {
   category: "dns",
   scan: async (ctx) => {
     const findings: Finding[] = [];
-    const domain = ctx.domain;
+    // SPF, DKIM, DMARC are always on the root domain, not subdomains.
+    // Strip www (or any subdomain) to check the right place.
+    const parts = ctx.domain.split(".");
+    const domain = parts.length > 2 ? parts.slice(-2).join(".") : ctx.domain;
     const resolver = new dns.Resolver();
 
     // --- SPF ---
