@@ -1,0 +1,386 @@
+{
+  "domain": "icapbridging2worlds.com",
+  "url": "https://icapbridging2worlds.com",
+  "timestamp": "2026-03-23T03:22:05.572Z",
+  "durationMs": 12138,
+  "overallGrade": "F",
+  "categories": [
+    {
+      "category": "tls",
+      "grade": "A",
+      "findings": [
+        {
+          "id": "tls-hsts-short",
+          "category": "tls",
+          "severity": "low",
+          "title": "HSTS max-age is short",
+          "detail": "max-age=7776000 (90 days). Recommended: 31536000 (1 year).",
+          "risk": "Short HSTS windows leave gaps where downgrade attacks are possible."
+        }
+      ],
+      "durationMs": 78
+    },
+    {
+      "category": "headers",
+      "grade": "B",
+      "findings": [
+        {
+          "id": "headers-no-csp",
+          "category": "headers",
+          "severity": "high",
+          "title": "No Content-Security-Policy",
+          "detail": "CSP header is missing. The browser has no restrictions on which scripts can execute.",
+          "risk": "A single injected script (XSS, compromised CDN, malicious ad) can steal every piece of data on the page — form inputs, session tokens, document uploads.",
+          "precedent": {
+            "name": "SolarWinds / SUNBURST (2020)",
+            "summary": "Russian intelligence (SVR) compromised SolarWinds' build system and injected a backdoor (SUNBURST) into Orion software updates distributed to 18,000 customers. The trojanised updates were signed with valid certificates and went undetected for 14+ months.",
+            "impact": "18,000 organisations received compromised updates. High-value targets included US Treasury, Commerce, Homeland Security, and Microsoft. 14 months of undetected access.",
+            "source": "https://www.gao.gov/blog/solarwinds-cyberattack-demands-significant-federal-and-private-sector-response-infographic"
+          },
+          "remediation": "Add a Content-Security-Policy header. Start with: default-src 'self'; script-src 'self'"
+        },
+        {
+          "id": "headers-x-powered-by",
+          "category": "information-disclosure",
+          "severity": "low",
+          "title": "Technology disclosed: X-Powered-By: PHP/8.3.30",
+          "detail": "Framework/runtime version exposed via header.",
+          "risk": "Tells attackers exactly which technology stack your site runs on, letting them search for known exploits specific to that framework. Unnecessary information that only helps an attacker.",
+          "precedent": {
+            "name": "ChatGPT / OpenAI Redis Bug (2023)",
+            "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+            "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+            "source": "https://openai.com/index/march-20-chatgpt-outage/"
+          },
+          "remediation": "Remove the X-Powered-By header from your server configuration."
+        }
+      ],
+      "durationMs": 1
+    },
+    {
+      "category": "dns",
+      "grade": "C",
+      "findings": [
+        {
+          "id": "dns-spf-softfail",
+          "category": "dns",
+          "severity": "medium",
+          "title": "SPF uses ~all (softfail)",
+          "detail": "SPF record ends with ~all instead of -all. Emails from unauthorised senders are flagged but not rejected.",
+          "risk": "Spoofed emails still land in inboxes — just with a warning that most users ignore.",
+          "precedent": {
+            "name": "FBI IC3 BEC Statistics (2024)",
+            "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+            "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+            "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+          },
+          "remediation": "Change ~all to -all to hard-fail unauthorised senders."
+        },
+        {
+          "id": "dns-dmarc-none",
+          "category": "dns",
+          "severity": "high",
+          "title": "DMARC policy is p=none",
+          "detail": "DMARC exists but policy is 'none' — failures are reported but emails are still delivered.",
+          "risk": "Your DMARC is set to monitor only — spoofed emails still land in your clients' inboxes. This is a common first step but it provides zero protection. Attackers sending fake invoices from your domain succeed just as easily as if DMARC didn't exist.",
+          "precedent": {
+            "name": "FBI IC3 BEC Statistics (2024)",
+            "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+            "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+            "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+          },
+          "remediation": "Change p=none to p=reject in your _dmarc TXT record. This tells receiving servers to block spoofed emails instead of just logging them."
+        },
+        {
+          "id": "dns-no-dnssec",
+          "category": "dns",
+          "severity": "low",
+          "title": "DNSSEC not enabled",
+          "detail": "DNS responses are not cryptographically signed.",
+          "risk": "DNS responses can be forged (cache poisoning). An attacker could redirect the domain to a phishing site at the DNS level.",
+          "remediation": "Enable DNSSEC with your domain registrar."
+        }
+      ],
+      "durationMs": 199
+    },
+    {
+      "category": "exposed-paths",
+      "grade": "A",
+      "findings": [
+        {
+          "id": "paths-wp-login-php",
+          "category": "exposed-paths",
+          "severity": "low",
+          "title": "Exposed: WordPress login",
+          "detail": "/wp-login.php returned HTTP 200.",
+          "risk": "WordPress login page exposed. Enables credential stuffing and brute-force.",
+          "precedent": {
+            "name": "GoDaddy Multi-Year Breach (2019-2022)",
+            "summary": "Attackers compromised GoDaddy's shared hosting environment starting October 2019, stealing SSH credentials and installing malware over multiple years. A November 2021 incident exposed 1.2 million WordPress customers' data via a compromised API.",
+            "impact": "28,000 customer SSH credentials and 199 employee SSH credentials stolen. 1.2 million WordPress customer records exposed. FTC enforcement action for unreasonable security practices.",
+            "source": "https://www.bleepingcomputer.com/news/security/godaddy-hackers-stole-source-code-installed-malware-in-multi-year-breach/"
+          },
+          "remediation": "Block access to /wp-login.php via server configuration or .htaccess rules."
+        },
+        {
+          "id": "paths-no-security-txt",
+          "category": "exposed-paths",
+          "severity": "info",
+          "title": "No security.txt",
+          "detail": "No /.well-known/security.txt found (RFC 9116).",
+          "risk": "Security researchers who find vulnerabilities have no way to report them responsibly.",
+          "remediation": "Create a security.txt with at least a Contact field."
+        }
+      ],
+      "durationMs": 9452
+    },
+    {
+      "category": "third-party",
+      "grade": "B",
+      "findings": [
+        {
+          "id": "third-party-google-analytics---gtm",
+          "category": "third-party",
+          "severity": "low",
+          "title": "Third-party: Google Analytics / GTM",
+          "detail": "Google Analytics / GTM detected in page source.",
+          "risk": "Visitor behaviour, page views, and form interactions sent to Google.",
+          "precedent": {
+            "name": "Princeton Session Replay Study (2017)",
+            "summary": "Researchers examined seven session replay companies and found scripts on 482 of the top 50,000 websites including HP, Comcast, Intel, Lenovo, Gap, and Costco. Credit card numbers, health information, and addresses were captured and transmitted to third-party servers.",
+            "impact": "482 major websites found leaking user data via session replay scripts. Sensitive data including credit cards and medical records exfiltrated to third-party servers without user knowledge.",
+            "source": "https://www.fastcompany.com/90152433/the-popular-web-design-tool-thats-actually-a-massive-privacy-nightmare"
+          }
+        },
+        {
+          "id": "third-party-google-recaptcha",
+          "category": "third-party",
+          "severity": "low",
+          "title": "Third-party: Google reCAPTCHA",
+          "detail": "Google reCAPTCHA detected in page source.",
+          "risk": "Google tracks user behaviour to detect bots. Sends data to Google on every page load.",
+          "precedent": {
+            "name": "Princeton Session Replay Study (2017)",
+            "summary": "Researchers examined seven session replay companies and found scripts on 482 of the top 50,000 websites including HP, Comcast, Intel, Lenovo, Gap, and Costco. Credit card numbers, health information, and addresses were captured and transmitted to third-party servers.",
+            "impact": "482 major websites found leaking user data via session replay scripts. Sensitive data including credit cards and medical records exfiltrated to third-party servers without user knowledge.",
+            "source": "https://www.fastcompany.com/90152433/the-popular-web-design-tool-thats-actually-a-massive-privacy-nightmare"
+          }
+        },
+        {
+          "id": "third-party-count",
+          "category": "third-party",
+          "severity": "medium",
+          "title": "7 external domains loaded",
+          "detail": "The page loads resources from 7 external domains: www.google.com, analytics.ahrefs.com, calendly.com, assets.calendly.com, cdn.trustindex.io, gmpg.org, use.typekit.net",
+          "risk": "Each external domain receives data about your visitors (IP address, browser, page URL at minimum). More domains = more exposure."
+        },
+        {
+          "id": "third-party-no-sri",
+          "category": "third-party",
+          "severity": "medium",
+          "title": "32 external scripts without SRI",
+          "detail": "External scripts loaded without Subresource Integrity hashes.",
+          "risk": "If a CDN or third-party is compromised, modified scripts execute on your site with full page access. SRI prevents this by verifying the file hash before execution.",
+          "remediation": "Add integrity attributes to external script tags."
+        }
+      ],
+      "durationMs": 32
+    },
+    {
+      "category": "forms",
+      "grade": "A",
+      "findings": [],
+      "durationMs": 12
+    },
+    {
+      "category": "cookies",
+      "grade": "B",
+      "findings": [
+        {
+          "id": "cookies-insecure-lead-sess-source",
+          "category": "cookies",
+          "severity": "high",
+          "title": "Insecure cookie: lead_sess_source",
+          "detail": "no Secure flag — cookie sent over unencrypted HTTP; no SameSite attribute — vulnerable to CSRF attacks",
+          "risk": "Session cookie without proper flags. An XSS vulnerability or network attacker can steal the user's session.",
+          "remediation": "Set HttpOnly, Secure, and SameSite=Strict (or Lax) on all cookies."
+        }
+      ],
+      "durationMs": 0
+    }
+  ],
+  "findings": [
+    {
+      "id": "tls-hsts-short",
+      "category": "tls",
+      "severity": "low",
+      "title": "HSTS max-age is short",
+      "detail": "max-age=7776000 (90 days). Recommended: 31536000 (1 year).",
+      "risk": "Short HSTS windows leave gaps where downgrade attacks are possible."
+    },
+    {
+      "id": "headers-no-csp",
+      "category": "headers",
+      "severity": "high",
+      "title": "No Content-Security-Policy",
+      "detail": "CSP header is missing. The browser has no restrictions on which scripts can execute.",
+      "risk": "A single injected script (XSS, compromised CDN, malicious ad) can steal every piece of data on the page — form inputs, session tokens, document uploads.",
+      "precedent": {
+        "name": "SolarWinds / SUNBURST (2020)",
+        "summary": "Russian intelligence (SVR) compromised SolarWinds' build system and injected a backdoor (SUNBURST) into Orion software updates distributed to 18,000 customers. The trojanised updates were signed with valid certificates and went undetected for 14+ months.",
+        "impact": "18,000 organisations received compromised updates. High-value targets included US Treasury, Commerce, Homeland Security, and Microsoft. 14 months of undetected access.",
+        "source": "https://www.gao.gov/blog/solarwinds-cyberattack-demands-significant-federal-and-private-sector-response-infographic"
+      },
+      "remediation": "Add a Content-Security-Policy header. Start with: default-src 'self'; script-src 'self'"
+    },
+    {
+      "id": "headers-x-powered-by",
+      "category": "information-disclosure",
+      "severity": "low",
+      "title": "Technology disclosed: X-Powered-By: PHP/8.3.30",
+      "detail": "Framework/runtime version exposed via header.",
+      "risk": "Tells attackers exactly which technology stack your site runs on, letting them search for known exploits specific to that framework. Unnecessary information that only helps an attacker.",
+      "precedent": {
+        "name": "ChatGPT / OpenAI Redis Bug (2023)",
+        "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+        "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+        "source": "https://openai.com/index/march-20-chatgpt-outage/"
+      },
+      "remediation": "Remove the X-Powered-By header from your server configuration."
+    },
+    {
+      "id": "dns-spf-softfail",
+      "category": "dns",
+      "severity": "medium",
+      "title": "SPF uses ~all (softfail)",
+      "detail": "SPF record ends with ~all instead of -all. Emails from unauthorised senders are flagged but not rejected.",
+      "risk": "Spoofed emails still land in inboxes — just with a warning that most users ignore.",
+      "precedent": {
+        "name": "FBI IC3 BEC Statistics (2024)",
+        "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+        "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+        "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+      },
+      "remediation": "Change ~all to -all to hard-fail unauthorised senders."
+    },
+    {
+      "id": "dns-dmarc-none",
+      "category": "dns",
+      "severity": "high",
+      "title": "DMARC policy is p=none",
+      "detail": "DMARC exists but policy is 'none' — failures are reported but emails are still delivered.",
+      "risk": "Your DMARC is set to monitor only — spoofed emails still land in your clients' inboxes. This is a common first step but it provides zero protection. Attackers sending fake invoices from your domain succeed just as easily as if DMARC didn't exist.",
+      "precedent": {
+        "name": "FBI IC3 BEC Statistics (2024)",
+        "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+        "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+        "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+      },
+      "remediation": "Change p=none to p=reject in your _dmarc TXT record. This tells receiving servers to block spoofed emails instead of just logging them."
+    },
+    {
+      "id": "dns-no-dnssec",
+      "category": "dns",
+      "severity": "low",
+      "title": "DNSSEC not enabled",
+      "detail": "DNS responses are not cryptographically signed.",
+      "risk": "DNS responses can be forged (cache poisoning). An attacker could redirect the domain to a phishing site at the DNS level.",
+      "remediation": "Enable DNSSEC with your domain registrar."
+    },
+    {
+      "id": "paths-wp-login-php",
+      "category": "exposed-paths",
+      "severity": "low",
+      "title": "Exposed: WordPress login",
+      "detail": "/wp-login.php returned HTTP 200.",
+      "risk": "WordPress login page exposed. Enables credential stuffing and brute-force.",
+      "precedent": {
+        "name": "GoDaddy Multi-Year Breach (2019-2022)",
+        "summary": "Attackers compromised GoDaddy's shared hosting environment starting October 2019, stealing SSH credentials and installing malware over multiple years. A November 2021 incident exposed 1.2 million WordPress customers' data via a compromised API.",
+        "impact": "28,000 customer SSH credentials and 199 employee SSH credentials stolen. 1.2 million WordPress customer records exposed. FTC enforcement action for unreasonable security practices.",
+        "source": "https://www.bleepingcomputer.com/news/security/godaddy-hackers-stole-source-code-installed-malware-in-multi-year-breach/"
+      },
+      "remediation": "Block access to /wp-login.php via server configuration or .htaccess rules."
+    },
+    {
+      "id": "paths-no-security-txt",
+      "category": "exposed-paths",
+      "severity": "info",
+      "title": "No security.txt",
+      "detail": "No /.well-known/security.txt found (RFC 9116).",
+      "risk": "Security researchers who find vulnerabilities have no way to report them responsibly.",
+      "remediation": "Create a security.txt with at least a Contact field."
+    },
+    {
+      "id": "third-party-google-analytics---gtm",
+      "category": "third-party",
+      "severity": "low",
+      "title": "Third-party: Google Analytics / GTM",
+      "detail": "Google Analytics / GTM detected in page source.",
+      "risk": "Visitor behaviour, page views, and form interactions sent to Google.",
+      "precedent": {
+        "name": "Princeton Session Replay Study (2017)",
+        "summary": "Researchers examined seven session replay companies and found scripts on 482 of the top 50,000 websites including HP, Comcast, Intel, Lenovo, Gap, and Costco. Credit card numbers, health information, and addresses were captured and transmitted to third-party servers.",
+        "impact": "482 major websites found leaking user data via session replay scripts. Sensitive data including credit cards and medical records exfiltrated to third-party servers without user knowledge.",
+        "source": "https://www.fastcompany.com/90152433/the-popular-web-design-tool-thats-actually-a-massive-privacy-nightmare"
+      }
+    },
+    {
+      "id": "third-party-google-recaptcha",
+      "category": "third-party",
+      "severity": "low",
+      "title": "Third-party: Google reCAPTCHA",
+      "detail": "Google reCAPTCHA detected in page source.",
+      "risk": "Google tracks user behaviour to detect bots. Sends data to Google on every page load.",
+      "precedent": {
+        "name": "Princeton Session Replay Study (2017)",
+        "summary": "Researchers examined seven session replay companies and found scripts on 482 of the top 50,000 websites including HP, Comcast, Intel, Lenovo, Gap, and Costco. Credit card numbers, health information, and addresses were captured and transmitted to third-party servers.",
+        "impact": "482 major websites found leaking user data via session replay scripts. Sensitive data including credit cards and medical records exfiltrated to third-party servers without user knowledge.",
+        "source": "https://www.fastcompany.com/90152433/the-popular-web-design-tool-thats-actually-a-massive-privacy-nightmare"
+      }
+    },
+    {
+      "id": "third-party-count",
+      "category": "third-party",
+      "severity": "medium",
+      "title": "7 external domains loaded",
+      "detail": "The page loads resources from 7 external domains: www.google.com, analytics.ahrefs.com, calendly.com, assets.calendly.com, cdn.trustindex.io, gmpg.org, use.typekit.net",
+      "risk": "Each external domain receives data about your visitors (IP address, browser, page URL at minimum). More domains = more exposure."
+    },
+    {
+      "id": "third-party-no-sri",
+      "category": "third-party",
+      "severity": "medium",
+      "title": "32 external scripts without SRI",
+      "detail": "External scripts loaded without Subresource Integrity hashes.",
+      "risk": "If a CDN or third-party is compromised, modified scripts execute on your site with full page access. SRI prevents this by verifying the file hash before execution.",
+      "remediation": "Add integrity attributes to external script tags."
+    },
+    {
+      "id": "cookies-insecure-lead-sess-source",
+      "category": "cookies",
+      "severity": "high",
+      "title": "Insecure cookie: lead_sess_source",
+      "detail": "no Secure flag — cookie sent over unencrypted HTTP; no SameSite attribute — vulnerable to CSRF attacks",
+      "risk": "Session cookie without proper flags. An XSS vulnerability or network attacker can steal the user's session.",
+      "remediation": "Set HttpOnly, Secure, and SameSite=Strict (or Lax) on all cookies."
+    }
+  ],
+  "thirdPartyDomains": [
+    "analytics.ahrefs.com",
+    "assets.calendly.com",
+    "calendly.com",
+    "cdn.trustindex.io",
+    "gmpg.org",
+    "use.typekit.net",
+    "www.google.com"
+  ],
+  "summary": {
+    "critical": 0,
+    "high": 3,
+    "medium": 3,
+    "low": 6,
+    "info": 1,
+    "total": 13
+  }
+}

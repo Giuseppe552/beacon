@@ -1,0 +1,431 @@
+{
+  "domain": "fleitasarcalaw.com",
+  "url": "https://fleitasarcalaw.com",
+  "timestamp": "2026-03-23T03:21:21.489Z",
+  "durationMs": 5190,
+  "overallGrade": "F",
+  "categories": [
+    {
+      "category": "tls",
+      "grade": "B",
+      "findings": [
+        {
+          "id": "tls-no-hsts",
+          "category": "tls",
+          "severity": "high",
+          "title": "No HSTS header",
+          "detail": "Strict-Transport-Security header is missing.",
+          "risk": "First visit to the site can be intercepted on public WiFi before the HTTPS redirect. Session cookies and form data exposed.",
+          "precedent": {
+            "name": "Heartbleed / OpenSSL (2014)",
+            "summary": "CVE-2014-0160 in OpenSSL's heartbeat extension allowed remote memory disclosure, leaking private keys, session tokens, and credentials from any server running vulnerable OpenSSL. Attackers could read 64KB of server memory per request.",
+            "impact": "Community Health Systems: 4.5 million patient records stolen. Canada Revenue Agency: 900 social insurance numbers exfiltrated. Estimated 17% of all SSL web servers affected.",
+            "source": "https://en.wikipedia.org/wiki/Heartbleed"
+          },
+          "remediation": "Add Strict-Transport-Security: max-age=31536000; includeSubDomains; preload"
+        }
+      ],
+      "durationMs": 319
+    },
+    {
+      "category": "headers",
+      "grade": "C",
+      "findings": [
+        {
+          "id": "headers-no-csp",
+          "category": "headers",
+          "severity": "high",
+          "title": "No Content-Security-Policy",
+          "detail": "CSP header is missing. The browser has no restrictions on which scripts can execute.",
+          "risk": "A single injected script (XSS, compromised CDN, malicious ad) can steal every piece of data on the page — form inputs, session tokens, document uploads.",
+          "precedent": {
+            "name": "SolarWinds / SUNBURST (2020)",
+            "summary": "Russian intelligence (SVR) compromised SolarWinds' build system and injected a backdoor (SUNBURST) into Orion software updates distributed to 18,000 customers. The trojanised updates were signed with valid certificates and went undetected for 14+ months.",
+            "impact": "18,000 organisations received compromised updates. High-value targets included US Treasury, Commerce, Homeland Security, and Microsoft. 14 months of undetected access.",
+            "source": "https://www.gao.gov/blog/solarwinds-cyberattack-demands-significant-federal-and-private-sector-response-infographic"
+          },
+          "remediation": "Add a Content-Security-Policy header. Start with: default-src 'self'; script-src 'self'"
+        },
+        {
+          "id": "headers-no-frame-protection",
+          "category": "headers",
+          "severity": "medium",
+          "title": "No clickjacking protection",
+          "detail": "Neither X-Frame-Options nor CSP frame-ancestors is set.",
+          "risk": "An attacker can embed your site inside their own page invisibly. Your clients think they're clicking buttons on your site while actually authorising actions on the attacker's page — transferring money, changing passwords, submitting documents.",
+          "precedent": {
+            "name": "Adobe Flash Settings Clickjacking (2008)",
+            "summary": "Attackers loaded Adobe Flash Player's settings page into an invisible iframe, tricking users into clicking through security dialogs that granted webcam and microphone access to the attacker's site.",
+            "impact": "Users unknowingly granted webcam and microphone access to malicious sites. Led to the formal definition of clickjacking as an attack class.",
+            "source": "https://owasp.org/www-community/attacks/Clickjacking"
+          },
+          "remediation": "Add X-Frame-Options: DENY or frame-ancestors 'none' to your CSP. This is a one-line server configuration change."
+        },
+        {
+          "id": "headers-no-nosniff",
+          "category": "headers",
+          "severity": "low",
+          "title": "Missing X-Content-Type-Options: nosniff",
+          "detail": "Browser may interpret uploaded files as executable content.",
+          "risk": "Uploaded files (PDFs, images) could be misinterpreted as executable code by the browser. An attacker who uploads a malicious file could trick the browser into running it as a script.",
+          "precedent": {
+            "name": "British Airways (2018)",
+            "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+            "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+            "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+          },
+          "remediation": "Add X-Content-Type-Options: nosniff to your server headers. One-line configuration change."
+        },
+        {
+          "id": "headers-no-permissions-policy",
+          "category": "headers",
+          "severity": "low",
+          "title": "No Permissions-Policy",
+          "detail": "Browser features (camera, microphone, geolocation) are not explicitly restricted.",
+          "risk": "Without this header, a compromised page could silently activate a visitor's camera, microphone, or GPS. The browser allows these by default unless you explicitly block them.",
+          "precedent": {
+            "name": "British Airways (2018)",
+            "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+            "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+            "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+          },
+          "remediation": "Add Permissions-Policy: camera=(), microphone=(), geolocation=() to your server headers. Blocks device access even if the site is compromised."
+        },
+        {
+          "id": "headers-server-version",
+          "category": "information-disclosure",
+          "severity": "low",
+          "title": "Server version disclosed: Apache/2.4.62 (Ubuntu)",
+          "detail": "The Server header includes a version number.",
+          "risk": "Attackers can look up every known vulnerability for this exact software version and attempt them all. It's like leaving your house key brand visible — it tells a burglar exactly which tools to bring.",
+          "precedent": {
+            "name": "ChatGPT / OpenAI Redis Bug (2023)",
+            "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+            "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+            "source": "https://openai.com/index/march-20-chatgpt-outage/"
+          },
+          "remediation": "Configure your server to hide the version number. Usually one line in the server config."
+        },
+        {
+          "id": "headers-x-powered-by",
+          "category": "information-disclosure",
+          "severity": "low",
+          "title": "Technology disclosed: X-Powered-By: jCacheOpt v0.1.1",
+          "detail": "Framework/runtime version exposed via header.",
+          "risk": "Tells attackers exactly which technology stack your site runs on, letting them search for known exploits specific to that framework. Unnecessary information that only helps an attacker.",
+          "precedent": {
+            "name": "ChatGPT / OpenAI Redis Bug (2023)",
+            "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+            "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+            "source": "https://openai.com/index/march-20-chatgpt-outage/"
+          },
+          "remediation": "Remove the X-Powered-By header from your server configuration."
+        }
+      ],
+      "durationMs": 1
+    },
+    {
+      "category": "dns",
+      "grade": "C",
+      "findings": [
+        {
+          "id": "dns-no-dmarc-record",
+          "category": "dns",
+          "severity": "high",
+          "title": "No DMARC record",
+          "detail": "Could not resolve _dmarc TXT record.",
+          "risk": "Without DMARC, anyone in the world can send emails that appear to come from your domain. Clients, partners, and staff have no way to tell the difference. This is the single most common technique used in invoice fraud — an attacker sends a payment instruction that looks exactly like it came from your company.",
+          "precedent": {
+            "name": "FBI IC3 BEC Statistics (2024)",
+            "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+            "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+            "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+          },
+          "remediation": "Add a TXT record at _dmarc.yourdomain.com: v=DMARC1; p=reject; rua=mailto:dmarc@yourdomain.com. This tells receiving email servers to reject emails that fail authentication checks."
+        },
+        {
+          "id": "dns-no-dkim",
+          "category": "dns",
+          "severity": "medium",
+          "title": "No DKIM record found",
+          "detail": "Checked 18 common selectors — none returned a DKIM key.",
+          "risk": "Without DKIM, receiving servers can't verify that emails were actually sent by this domain's mail server.",
+          "remediation": "Configure DKIM signing with your email provider and publish the public key in DNS."
+        },
+        {
+          "id": "dns-no-dnssec",
+          "category": "dns",
+          "severity": "low",
+          "title": "DNSSEC not enabled",
+          "detail": "DNS responses are not cryptographically signed.",
+          "risk": "DNS responses can be forged (cache poisoning). An attacker could redirect the domain to a phishing site at the DNS level.",
+          "remediation": "Enable DNSSEC with your domain registrar."
+        }
+      ],
+      "durationMs": 1484
+    },
+    {
+      "category": "exposed-paths",
+      "grade": "A",
+      "findings": [
+        {
+          "id": "paths-no-security-txt",
+          "category": "exposed-paths",
+          "severity": "info",
+          "title": "No security.txt",
+          "detail": "No /.well-known/security.txt found (RFC 9116).",
+          "risk": "Security researchers who find vulnerabilities have no way to report them responsibly.",
+          "remediation": "Create a security.txt with at least a Contact field."
+        }
+      ],
+      "durationMs": 2319
+    },
+    {
+      "category": "third-party",
+      "grade": "B",
+      "findings": [
+        {
+          "id": "third-party-google-analytics---gtm",
+          "category": "third-party",
+          "severity": "low",
+          "title": "Third-party: Google Analytics / GTM",
+          "detail": "Google Analytics / GTM detected in page source.",
+          "risk": "Visitor behaviour, page views, and form interactions sent to Google.",
+          "precedent": {
+            "name": "Princeton Session Replay Study (2017)",
+            "summary": "Researchers examined seven session replay companies and found scripts on 482 of the top 50,000 websites including HP, Comcast, Intel, Lenovo, Gap, and Costco. Credit card numbers, health information, and addresses were captured and transmitted to third-party servers.",
+            "impact": "482 major websites found leaking user data via session replay scripts. Sensitive data including credit cards and medical records exfiltrated to third-party servers without user knowledge.",
+            "source": "https://www.fastcompany.com/90152433/the-popular-web-design-tool-thats-actually-a-massive-privacy-nightmare"
+          }
+        },
+        {
+          "id": "third-party-count",
+          "category": "third-party",
+          "severity": "medium",
+          "title": "7 external domains loaded",
+          "detail": "The page loads resources from 7 external domains: justatic.com, www.googletagmanager.com, fonts.googleapis.com, fonts.gstatic.com, ss.justia.run, unpkg.com, lawyers.justia.com",
+          "risk": "Each external domain receives data about your visitors (IP address, browser, page URL at minimum). More domains = more exposure."
+        },
+        {
+          "id": "third-party-no-sri",
+          "category": "third-party",
+          "severity": "medium",
+          "title": "7 external scripts without SRI",
+          "detail": "External scripts loaded without Subresource Integrity hashes.",
+          "risk": "If a CDN or third-party is compromised, modified scripts execute on your site with full page access. SRI prevents this by verifying the file hash before execution.",
+          "remediation": "Add integrity attributes to external script tags."
+        }
+      ],
+      "durationMs": 24
+    },
+    {
+      "category": "forms",
+      "grade": "A",
+      "findings": [],
+      "durationMs": 6
+    },
+    {
+      "category": "cookies",
+      "grade": "A",
+      "findings": [],
+      "durationMs": 0
+    }
+  ],
+  "findings": [
+    {
+      "id": "tls-no-hsts",
+      "category": "tls",
+      "severity": "high",
+      "title": "No HSTS header",
+      "detail": "Strict-Transport-Security header is missing.",
+      "risk": "First visit to the site can be intercepted on public WiFi before the HTTPS redirect. Session cookies and form data exposed.",
+      "precedent": {
+        "name": "Heartbleed / OpenSSL (2014)",
+        "summary": "CVE-2014-0160 in OpenSSL's heartbeat extension allowed remote memory disclosure, leaking private keys, session tokens, and credentials from any server running vulnerable OpenSSL. Attackers could read 64KB of server memory per request.",
+        "impact": "Community Health Systems: 4.5 million patient records stolen. Canada Revenue Agency: 900 social insurance numbers exfiltrated. Estimated 17% of all SSL web servers affected.",
+        "source": "https://en.wikipedia.org/wiki/Heartbleed"
+      },
+      "remediation": "Add Strict-Transport-Security: max-age=31536000; includeSubDomains; preload"
+    },
+    {
+      "id": "headers-no-csp",
+      "category": "headers",
+      "severity": "high",
+      "title": "No Content-Security-Policy",
+      "detail": "CSP header is missing. The browser has no restrictions on which scripts can execute.",
+      "risk": "A single injected script (XSS, compromised CDN, malicious ad) can steal every piece of data on the page — form inputs, session tokens, document uploads.",
+      "precedent": {
+        "name": "SolarWinds / SUNBURST (2020)",
+        "summary": "Russian intelligence (SVR) compromised SolarWinds' build system and injected a backdoor (SUNBURST) into Orion software updates distributed to 18,000 customers. The trojanised updates were signed with valid certificates and went undetected for 14+ months.",
+        "impact": "18,000 organisations received compromised updates. High-value targets included US Treasury, Commerce, Homeland Security, and Microsoft. 14 months of undetected access.",
+        "source": "https://www.gao.gov/blog/solarwinds-cyberattack-demands-significant-federal-and-private-sector-response-infographic"
+      },
+      "remediation": "Add a Content-Security-Policy header. Start with: default-src 'self'; script-src 'self'"
+    },
+    {
+      "id": "headers-no-frame-protection",
+      "category": "headers",
+      "severity": "medium",
+      "title": "No clickjacking protection",
+      "detail": "Neither X-Frame-Options nor CSP frame-ancestors is set.",
+      "risk": "An attacker can embed your site inside their own page invisibly. Your clients think they're clicking buttons on your site while actually authorising actions on the attacker's page — transferring money, changing passwords, submitting documents.",
+      "precedent": {
+        "name": "Adobe Flash Settings Clickjacking (2008)",
+        "summary": "Attackers loaded Adobe Flash Player's settings page into an invisible iframe, tricking users into clicking through security dialogs that granted webcam and microphone access to the attacker's site.",
+        "impact": "Users unknowingly granted webcam and microphone access to malicious sites. Led to the formal definition of clickjacking as an attack class.",
+        "source": "https://owasp.org/www-community/attacks/Clickjacking"
+      },
+      "remediation": "Add X-Frame-Options: DENY or frame-ancestors 'none' to your CSP. This is a one-line server configuration change."
+    },
+    {
+      "id": "headers-no-nosniff",
+      "category": "headers",
+      "severity": "low",
+      "title": "Missing X-Content-Type-Options: nosniff",
+      "detail": "Browser may interpret uploaded files as executable content.",
+      "risk": "Uploaded files (PDFs, images) could be misinterpreted as executable code by the browser. An attacker who uploads a malicious file could trick the browser into running it as a script.",
+      "precedent": {
+        "name": "British Airways (2018)",
+        "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+        "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+        "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+      },
+      "remediation": "Add X-Content-Type-Options: nosniff to your server headers. One-line configuration change."
+    },
+    {
+      "id": "headers-no-permissions-policy",
+      "category": "headers",
+      "severity": "low",
+      "title": "No Permissions-Policy",
+      "detail": "Browser features (camera, microphone, geolocation) are not explicitly restricted.",
+      "risk": "Without this header, a compromised page could silently activate a visitor's camera, microphone, or GPS. The browser allows these by default unless you explicitly block them.",
+      "precedent": {
+        "name": "British Airways (2018)",
+        "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+        "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+        "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+      },
+      "remediation": "Add Permissions-Policy: camera=(), microphone=(), geolocation=() to your server headers. Blocks device access even if the site is compromised."
+    },
+    {
+      "id": "headers-server-version",
+      "category": "information-disclosure",
+      "severity": "low",
+      "title": "Server version disclosed: Apache/2.4.62 (Ubuntu)",
+      "detail": "The Server header includes a version number.",
+      "risk": "Attackers can look up every known vulnerability for this exact software version and attempt them all. It's like leaving your house key brand visible — it tells a burglar exactly which tools to bring.",
+      "precedent": {
+        "name": "ChatGPT / OpenAI Redis Bug (2023)",
+        "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+        "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+        "source": "https://openai.com/index/march-20-chatgpt-outage/"
+      },
+      "remediation": "Configure your server to hide the version number. Usually one line in the server config."
+    },
+    {
+      "id": "headers-x-powered-by",
+      "category": "information-disclosure",
+      "severity": "low",
+      "title": "Technology disclosed: X-Powered-By: jCacheOpt v0.1.1",
+      "detail": "Framework/runtime version exposed via header.",
+      "risk": "Tells attackers exactly which technology stack your site runs on, letting them search for known exploits specific to that framework. Unnecessary information that only helps an attacker.",
+      "precedent": {
+        "name": "ChatGPT / OpenAI Redis Bug (2023)",
+        "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+        "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+        "source": "https://openai.com/index/march-20-chatgpt-outage/"
+      },
+      "remediation": "Remove the X-Powered-By header from your server configuration."
+    },
+    {
+      "id": "dns-no-dmarc-record",
+      "category": "dns",
+      "severity": "high",
+      "title": "No DMARC record",
+      "detail": "Could not resolve _dmarc TXT record.",
+      "risk": "Without DMARC, anyone in the world can send emails that appear to come from your domain. Clients, partners, and staff have no way to tell the difference. This is the single most common technique used in invoice fraud — an attacker sends a payment instruction that looks exactly like it came from your company.",
+      "precedent": {
+        "name": "FBI IC3 BEC Statistics (2024)",
+        "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+        "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+        "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+      },
+      "remediation": "Add a TXT record at _dmarc.yourdomain.com: v=DMARC1; p=reject; rua=mailto:dmarc@yourdomain.com. This tells receiving email servers to reject emails that fail authentication checks."
+    },
+    {
+      "id": "dns-no-dkim",
+      "category": "dns",
+      "severity": "medium",
+      "title": "No DKIM record found",
+      "detail": "Checked 18 common selectors — none returned a DKIM key.",
+      "risk": "Without DKIM, receiving servers can't verify that emails were actually sent by this domain's mail server.",
+      "remediation": "Configure DKIM signing with your email provider and publish the public key in DNS."
+    },
+    {
+      "id": "dns-no-dnssec",
+      "category": "dns",
+      "severity": "low",
+      "title": "DNSSEC not enabled",
+      "detail": "DNS responses are not cryptographically signed.",
+      "risk": "DNS responses can be forged (cache poisoning). An attacker could redirect the domain to a phishing site at the DNS level.",
+      "remediation": "Enable DNSSEC with your domain registrar."
+    },
+    {
+      "id": "paths-no-security-txt",
+      "category": "exposed-paths",
+      "severity": "info",
+      "title": "No security.txt",
+      "detail": "No /.well-known/security.txt found (RFC 9116).",
+      "risk": "Security researchers who find vulnerabilities have no way to report them responsibly.",
+      "remediation": "Create a security.txt with at least a Contact field."
+    },
+    {
+      "id": "third-party-google-analytics---gtm",
+      "category": "third-party",
+      "severity": "low",
+      "title": "Third-party: Google Analytics / GTM",
+      "detail": "Google Analytics / GTM detected in page source.",
+      "risk": "Visitor behaviour, page views, and form interactions sent to Google.",
+      "precedent": {
+        "name": "Princeton Session Replay Study (2017)",
+        "summary": "Researchers examined seven session replay companies and found scripts on 482 of the top 50,000 websites including HP, Comcast, Intel, Lenovo, Gap, and Costco. Credit card numbers, health information, and addresses were captured and transmitted to third-party servers.",
+        "impact": "482 major websites found leaking user data via session replay scripts. Sensitive data including credit cards and medical records exfiltrated to third-party servers without user knowledge.",
+        "source": "https://www.fastcompany.com/90152433/the-popular-web-design-tool-thats-actually-a-massive-privacy-nightmare"
+      }
+    },
+    {
+      "id": "third-party-count",
+      "category": "third-party",
+      "severity": "medium",
+      "title": "7 external domains loaded",
+      "detail": "The page loads resources from 7 external domains: justatic.com, www.googletagmanager.com, fonts.googleapis.com, fonts.gstatic.com, ss.justia.run, unpkg.com, lawyers.justia.com",
+      "risk": "Each external domain receives data about your visitors (IP address, browser, page URL at minimum). More domains = more exposure."
+    },
+    {
+      "id": "third-party-no-sri",
+      "category": "third-party",
+      "severity": "medium",
+      "title": "7 external scripts without SRI",
+      "detail": "External scripts loaded without Subresource Integrity hashes.",
+      "risk": "If a CDN or third-party is compromised, modified scripts execute on your site with full page access. SRI prevents this by verifying the file hash before execution.",
+      "remediation": "Add integrity attributes to external script tags."
+    }
+  ],
+  "thirdPartyDomains": [
+    "fonts.googleapis.com",
+    "fonts.gstatic.com",
+    "justatic.com",
+    "lawyers.justia.com",
+    "ss.justia.run",
+    "unpkg.com",
+    "www.googletagmanager.com"
+  ],
+  "summary": {
+    "critical": 0,
+    "high": 3,
+    "medium": 4,
+    "low": 6,
+    "info": 1,
+    "total": 14
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "beacon",
+  "version": "0.1.0",
+  "description": "Business security surface scanner. Checks TLS, headers, DNS, exposed paths, third-party tracking, and maps findings to real breach precedents.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Giuseppe Giona",
+  "bin": {
+    "beacon": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "node-html-parser": "^7.0.1",
+    "whois": "^2.16.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.1.0"
+  }
+}

@@ -1,0 +1,802 @@
+[
+  {
+    "key": "ba-magecart-2018",
+    "category": "xss",
+    "name": "British Airways (2018)",
+    "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+    "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of \u00a320 million (reduced from initial \u00a3183 million).",
+    "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+  },
+  {
+    "key": "ticketmaster-magecart-2018",
+    "category": "xss",
+    "name": "Ticketmaster (2018)",
+    "summary": "Magecart compromised Inbenta's third-party chatbot JavaScript embedded on Ticketmaster's payment pages, capturing card data from every customer served the modified script. A second supplier, SociaPlus, was also compromised affecting international sites.",
+    "impact": "Up to 9.4 million individuals in the EEA affected including 1.5 million in the UK. ICO fine of \u00a31.25 million.",
+    "source": "https://www.hunton.com/privacy-and-information-security-law/ico-fines-ticketmaster-1-25-million-for-security-failures"
+  },
+  {
+    "key": "fortnite-xss-2019",
+    "category": "xss",
+    "name": "Fortnite / Epic Games (2019)",
+    "summary": "Check Point discovered XSS and OAuth token theft vulnerabilities in Epic Games' login infrastructure. A flaw on an old, unvalidated subdomain allowed attackers to steal SSO authentication tokens and take over any player account with a single crafted link.",
+    "impact": "Up to 80 million Fortnite accounts potentially exposed to full account takeover including payment methods.",
+    "source": "https://blog.checkpoint.com/research/fortnite-vulnerability-where-only-the-secure-survive/"
+  },
+  {
+    "key": "neiman-marcus-magecart-2024",
+    "category": "xss",
+    "name": "Neiman Marcus (2024)",
+    "summary": "Neiman Marcus disclosed a data security incident detected in May 2024 involving unauthorized access to customer data through a compromised web-facing system. Class action settlement reached.",
+    "impact": "$3.5 million class action settlement. Customer personal and financial data exposed.",
+    "source": "https://www.nmgsettlement.com/"
+  },
+  {
+    "key": "wp-statistics-xss-2024",
+    "category": "xss",
+    "name": "WP Statistics Plugin (2024)",
+    "summary": "CVE-2024-2194: unauthenticated stored XSS in WP Statistics plugin (2M+ installs) was actively exploited in the wild. Attackers injected payloads creating rogue admin accounts, planting backdoors in theme files, and installing tracking scripts.",
+    "impact": "Over 2 million WordPress sites running vulnerable versions. Backdoors and admin accounts created on compromised sites.",
+    "source": "https://thehackernews.com/2024/05/researchers-uncover-active-exploitation.html"
+  },
+  {
+    "key": "equifax-expired-cert-2017",
+    "category": "tls-downgrade",
+    "name": "Equifax (2017)",
+    "summary": "An expired SSL certificate on Equifax's traffic inspection appliance meant encrypted exfiltration traffic went uninspected for 76 days. At the time of discovery, 324 SSL certificates had expired across Equifax systems, 79 on business-critical domains.",
+    "impact": "147 million Americans' SSNs, birth dates, and addresses stolen over 78 days. $1.38 billion total cost. FTC settlement of $700 million.",
+    "source": "https://www.thesslstore.com/blog/the-equifax-data-breach-went-undetected-for-76-days-because-of-an-expired-certificate/"
+  },
+  {
+    "key": "heartbleed-2014",
+    "category": "tls-downgrade",
+    "name": "Heartbleed / OpenSSL (2014)",
+    "summary": "CVE-2014-0160 in OpenSSL's heartbeat extension allowed remote memory disclosure, leaking private keys, session tokens, and credentials from any server running vulnerable OpenSSL. Attackers could read 64KB of server memory per request.",
+    "impact": "Community Health Systems: 4.5 million patient records stolen. Canada Revenue Agency: 900 social insurance numbers exfiltrated. Estimated 17% of all SSL web servers affected.",
+    "source": "https://en.wikipedia.org/wiki/Heartbleed"
+  },
+  {
+    "key": "citrix-bleed-2023",
+    "category": "tls-downgrade",
+    "name": "Citrix Bleed / CVE-2023-4966 (2023)",
+    "summary": "Buffer overflow in Citrix NetScaler ADC and Gateway leaked valid authentication session cookies from memory via crafted HTTP requests. Exploited as a zero-day since August 2023, adopted by LockBit ransomware for mass exploitation.",
+    "impact": "CISA emergency directive issued. LockBit used it to deploy ransomware across healthcare, financial, and government sectors. Bypasses MFA entirely via stolen session tokens.",
+    "source": "https://www.cisa.gov/guidance-addressing-citrix-netscaler-adc-and-gateway-vulnerability-cve-2023-4966-citrix-bleed"
+  },
+  {
+    "key": "epic-games-expired-cert-2023",
+    "category": "certificate-issues",
+    "name": "Epic Games (2023)",
+    "summary": "An expired internal wildcard certificate propagated across hundreds of backend services, causing cascading outages across Fortnite, Rocket League, Epic Games Store, and Epic Online Services.",
+    "impact": "Multi-hour outages across all Epic Games services affecting tens of millions of users. Revenue loss from Fortnite and store downtime.",
+    "source": "https://www.keyfactor.com/blog/2023s-biggest-certificate-outages-what-we-can-learn-from-them/"
+  },
+  {
+    "key": "cisco-sdwan-expired-cert-2023",
+    "category": "certificate-issues",
+    "name": "Cisco SD-WAN (2023)",
+    "summary": "Multi-year certificates inherited from Cisco's 2017 Viptela acquisition expired simultaneously in 2023, causing SD-WAN infrastructure failures for enterprise customers relying on the certificates for device authentication.",
+    "impact": "Over 20,000 enterprise customers affected by SD-WAN service disruptions.",
+    "source": "https://www.keyfactor.com/blog/2023s-biggest-certificate-outages-what-we-can-learn-from-them/"
+  },
+  {
+    "key": "spotify-microsoft-expired-cert-2023",
+    "category": "certificate-issues",
+    "name": "Microsoft/Spotify Integration (2023)",
+    "summary": "An expired certificate broke the OAuth flow between Microsoft's Clock app and Spotify's API, silently disabling the integration for months before anyone noticed the root cause.",
+    "impact": "Feature broken for months affecting all users of the Microsoft Clock/Spotify integration.",
+    "source": "https://www.keyfactor.com/blog/2023s-biggest-certificate-outages-what-we-can-learn-from-them/"
+  },
+  {
+    "key": "emeraldwhale-git-2024",
+    "category": "exposed-files",
+    "name": "EMERALDWHALE Campaign (2024)",
+    "summary": "A systematic campaign scanned the internet for exposed .git/config files and Laravel .env files, harvesting credentials at scale. Tools like MZR V2 and Seyzo-v2 automated the scanning and exploitation of exposed Git repositories.",
+    "impact": "15,000+ cloud credentials stolen. 10,000+ private repositories cloned. Over 110,000 domains had .env files scraped, exposing 90,000+ environment variables including 1,185 AWS keys.",
+    "source": "https://www.sysdig.com/blog/emeraldwhale"
+  },
+  {
+    "key": "toyota-github-2022",
+    "category": "exposed-files",
+    "name": "Toyota (2022)",
+    "summary": "An access key for a customer data server was committed to a public GitHub repository in December 2017 by a development subcontractor. The key sat exposed for nearly five years before anyone noticed in September 2022.",
+    "impact": "296,019 T-Connect customers' email addresses and customer IDs exposed for 5 years.",
+    "source": "https://www.bleepingcomputer.com/news/security/toyota-discloses-data-leak-after-access-key-exposed-on-github/"
+  },
+  {
+    "key": "mercedes-github-2024",
+    "category": "exposed-files",
+    "name": "Mercedes-Benz (2024)",
+    "summary": "A Mercedes employee's GitHub authentication token was found in a public repository during a routine internet scan by RedHunt Labs. The token granted unrestricted access to the entire Mercedes GitHub Enterprise Server including all private repositories.",
+    "impact": "Full access to proprietary source code, database connection strings, cloud access keys, SSO passwords, API keys, and internal design documents.",
+    "source": "https://techcrunch.com/2024/01/26/mercedez-benz-token-exposed-source-code-github/"
+  },
+  {
+    "key": "twitch-misconfig-2021",
+    "category": "exposed-files",
+    "name": "Twitch (2021)",
+    "summary": "A server misconfiguration exposed Twitch's entire internal Git infrastructure. An attacker leaked 125GB of data on 4chan including all source code, creator payout records, and internal tools.",
+    "impact": "6,000 internal Git repositories and 3 million documents leaked. 6,600 secrets found including 194 AWS keys, 69 Twilio keys, and creator payment data.",
+    "source": "https://thehackernews.com/2021/10/twitch-suffers-massive-125gb-data-and.html"
+  },
+  {
+    "key": "clearview-cloud-2020",
+    "category": "exposed-files",
+    "name": "Clearview AI (2020)",
+    "summary": "Misconfigured user settings on Clearview AI's source code repository allowed anyone to register as a new user and access the system. Exposed repositories contained secret keys and credentials granting access to cloud storage buckets.",
+    "impact": "Complete source code, compiled apps for all platforms, Slack tokens, cloud storage credentials, and 70,000 surveillance videos from a residential building lobby exposed.",
+    "source": "https://techcrunch.com/2020/04/16/clearview-source-code-lapse/"
+  },
+  {
+    "key": "bec-fbi-ic3-2024",
+    "category": "email-spoofing",
+    "name": "FBI IC3 BEC Statistics (2024)",
+    "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+    "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+    "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+  },
+  {
+    "key": "chinese-vc-mitm-2019",
+    "category": "email-spoofing",
+    "name": "Chinese VC Firm BEC Attack (2019)",
+    "summary": "Hackers intercepted email communications between a Chinese venture capital firm and an Israeli startup, conducting a man-in-the-middle attack to alter payment details in wire transfer instructions.",
+    "impact": "$1 million stolen via a single redirected wire transfer.",
+    "source": "https://www.imperva.com/learn/application-security/man-in-the-middle-attack-mitm/"
+  },
+  {
+    "key": "ofgem-morgan-stanley-whatsapp-2023",
+    "category": "email-spoofing",
+    "name": "Morgan Stanley / Ofgem (2023)",
+    "summary": "Ofgem fined Morgan Stanley for failures to record and retain trader communications sent through personal WhatsApp accounts, violating electronic trading communication record-keeping requirements.",
+    "impact": "\u00a35.4 million fine from UK energy regulator Ofgem.",
+    "source": "https://www.addleshawgoddard.com/en/insights/insights-briefings/2023/global-investigations/ofgem-issues-significant-fine-failures-record-retain-trader-communications-sent-whatsapp/"
+  },
+  {
+    "key": "eval-php-wordpress-2023",
+    "category": "wordpress-cms",
+    "name": "Eval PHP Plugin Exploitation (2023)",
+    "summary": "Attackers abused the abandoned Eval PHP WordPress plugin (no updates in 11 years) to backdoor websites. Downloads spiked from near-zero to 6,988 in a single day as attackers installed and activated the plugin on compromised sites to execute arbitrary PHP.",
+    "impact": "Over 8,000 websites running the vulnerable plugin. Mass backdoor deployment before WordPress.org permanently closed the plugin in April 2023.",
+    "source": "https://thehackernews.com/2023/04/hackers-exploit-outdated-wordpress.html"
+  },
+  {
+    "key": "advanced-custom-fields-xss-2023",
+    "category": "wordpress-cms",
+    "name": "Advanced Custom Fields (2023)",
+    "summary": "Reflected XSS vulnerability discovered in the Advanced Custom Fields WordPress plugin, one of the most popular WordPress plugins. Attackers could execute JavaScript in the context of an admin user's session.",
+    "impact": "Over 2 million active WordPress installations affected by the vulnerability.",
+    "source": "https://thehackernews.com/2023/05/new-vulnerability-in-popular-wordpress.html"
+  },
+  {
+    "key": "gutenkit-hunk-wordpress-2024",
+    "category": "wordpress-cms",
+    "name": "GutenKit & Hunk Companion (2024)",
+    "summary": "CVE-2024-9234 in GutenKit and Hunk Companion WordPress plugins allowed unauthenticated attackers to install and activate arbitrary plugins or upload files masquerading as plugins, enabling full site compromise.",
+    "impact": "Thousands of WordPress sites with unpatched plugins vulnerable to complete takeover despite vendor patches being available for nearly a year.",
+    "source": "https://patchstack.com/articles/q4-2024-most-exploited-wordpress-threats"
+  },
+  {
+    "key": "godaddy-multi-year-2019-2022",
+    "category": "wordpress-cms",
+    "name": "GoDaddy Multi-Year Breach (2019-2022)",
+    "summary": "Attackers compromised GoDaddy's shared hosting environment starting October 2019, stealing SSH credentials and installing malware over multiple years. A November 2021 incident exposed 1.2 million WordPress customers' data via a compromised API.",
+    "impact": "28,000 customer SSH credentials and 199 employee SSH credentials stolen. 1.2 million WordPress customer records exposed. FTC enforcement action for unreasonable security practices.",
+    "source": "https://www.bleepingcomputer.com/news/security/godaddy-hackers-stole-source-code-installed-malware-in-multi-year-breach/"
+  },
+  {
+    "key": "wordpress-file-upload-rce-2024",
+    "category": "wordpress-cms",
+    "name": "WordPress File Upload Plugin RCE (2024)",
+    "summary": "CVE-2024-11613 in the WordPress File Upload plugin (all versions up to 4.24.15) allowed unauthenticated remote code execution due to lack of input sanitisation on the source parameter and user-controlled directory paths.",
+    "impact": "Unauthenticated remote code execution on any WordPress site running the vulnerable plugin versions.",
+    "source": "https://github.com/Sachinart/CVE-2024-11613-wp-file-upload"
+  },
+  {
+    "key": "walgreens-fullstory-2018",
+    "category": "session-recording",
+    "name": "Walgreens / FullStory (2018)",
+    "summary": "Princeton researchers found that FullStory session replay scripts on walgreens.com captured medical conditions, prescription drug names, and user identities despite manual redaction efforts. Health data constituting HIPAA-protected information was exfiltrated to FullStory's servers.",
+    "impact": "Protected health information including prescriptions and medical conditions of Walgreens customers leaked to third-party servers. Walgreens terminated FullStory integration.",
+    "source": "https://blog.citp.princeton.edu/2017/11/15/no-boundaries-exfiltration-of-personal-data-by-session-replay-scripts/"
+  },
+  {
+    "key": "princeton-session-replay-2017",
+    "category": "session-recording",
+    "name": "Princeton Session Replay Study (2017)",
+    "summary": "Researchers examined seven session replay companies and found scripts on 482 of the top 50,000 websites including HP, Comcast, Intel, Lenovo, Gap, and Costco. Credit card numbers, health information, and addresses were captured and transmitted to third-party servers.",
+    "impact": "482 major websites found leaking user data via session replay scripts. Sensitive data including credit cards and medical records exfiltrated to third-party servers without user knowledge.",
+    "source": "https://www.fastcompany.com/90152433/the-popular-web-design-tool-thats-actually-a-massive-privacy-nightmare"
+  },
+  {
+    "key": "hotjar-security-flaws-2024",
+    "category": "session-recording",
+    "name": "Hotjar Security Vulnerabilities (2024)",
+    "summary": "Salt Security discovered critical security flaws in Hotjar's platform that could have allowed attackers unlimited access to sensitive data sets collected from session recordings and analytics across millions of websites using the service.",
+    "impact": "Potentially millions of users and organisations affected across Hotjar's global customer base. Vulnerabilities were remediated after disclosure.",
+    "source": "https://salt.security/press-releases/salt-security-discovers-security-flaws-in-hotjar-potentially-affecting-sensitive-data-of-millions-utilizing-major-global-brands---issues-have-been-remediated"
+  },
+  {
+    "key": "capita-s3-bucket-2023",
+    "category": "cloud-storage",
+    "name": "Capita (2023)",
+    "summary": "Two months after a ransomware attack, Capita was found to have left pension and benefits data in publicly accessible Amazon S3 storage. The main breach began when an employee downloaded a malicious file and the device wasn't quarantined for 58 hours.",
+    "impact": "6.6 million people's data stolen including pension records, criminal records, and financial data. ICO fine of \u00a314 million.",
+    "source": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2025/10/capita-fined-14m-for-data-breach-affecting-over-6m-people/"
+  },
+  {
+    "key": "pegasus-airlines-s3-2022",
+    "category": "cloud-storage",
+    "name": "Pegasus Airlines (2022)",
+    "summary": "A misconfigured AWS S3 bucket exposed 6.5TB of sensitive airline data including flight navigation charts, crew personal information, and 400 files containing plaintext passwords and secret keys.",
+    "impact": "6.5TB exposed including 1.6 million files of crew PII, flight navigation data, EFB source code, and plaintext credentials that could compromise flight safety systems.",
+    "source": "https://www.bankinfosecurity.com/pegasus-airlines-breach-exposes-65-tb-data-a-19173"
+  },
+  {
+    "key": "microsoft-azure-38tb-2023",
+    "category": "cloud-storage",
+    "name": "Microsoft Azure (2023)",
+    "summary": "Microsoft AI researchers accidentally exposed 38TB of private data via an overly permissive Azure Shared Access Signature (SAS) token. The exposed storage container included passwords for Microsoft services, secret keys, and 30,000 internal Teams messages from 359 employees.",
+    "impact": "38TB of internal Microsoft data exposed including service passwords, secret keys, and 30,000 internal Teams messages.",
+    "source": "https://www.bleepingcomputer.com/news/microsoft/microsoft-leaks-38tb-of-private-data-via-unsecured-azure-storage/"
+  },
+  {
+    "key": "microsoft-azure-blob-2022",
+    "category": "cloud-storage",
+    "name": "Microsoft Azure Blob / SOCRadar (2022)",
+    "summary": "SOCRadar discovered a misconfigured Azure Blob Storage container exposing 2.4TB of Microsoft data dated 2017-2022, including customer documents, invoices, product orders, and PII associated with 65,000+ companies across 111 countries.",
+    "impact": "2.4TB of data associated with 65,000+ companies in 111 countries. Included signed customer documents, price lists, and PII.",
+    "source": "https://www.darkreading.com/cloud-security/microsoft-data-exposure-incident-highlights-risk-of-cloud-storage-misconfigurations"
+  },
+  {
+    "key": "power-apps-38m-2021",
+    "category": "cloud-storage",
+    "name": "Microsoft Power Apps (2021)",
+    "summary": "Default permissions in Microsoft Power Apps portals left OData APIs anonymously accessible. UpGuard notified 47 entities including state governments and American Airlines. Microsoft initially called the exposure 'by design' before changing defaults.",
+    "impact": "38 million records exposed including COVID-19 tracing data, vaccination appointments, SSNs, and employee IDs across 47 organisations.",
+    "source": "https://www.upguard.com/breaches/power-apps"
+  },
+  {
+    "key": "wbsc-s3-passports-2023",
+    "category": "cloud-storage",
+    "name": "World Baseball Softball Confederation (2023)",
+    "summary": "An exposed S3 bucket belonging to the WBSC contained nearly 48,000 files including copies of 4,600 national passports of athletes and officials.",
+    "impact": "4,600 national passports and 48,000 files containing sensitive personal documents exposed publicly.",
+    "source": "https://www.hackmageddon.com/2023/03/29/leaky-buckets-in-2023/"
+  },
+  {
+    "key": "orrick-law-firm-2023",
+    "category": "legal-professional",
+    "name": "Orrick, Herrington & Sutcliffe (2023)",
+    "summary": "The law firm that handles data breaches for other companies suffered its own breach in March 2023. Hackers accessed names, addresses, dates of birth, and Social Security numbers of over 600,000 individuals.",
+    "impact": "600,000+ individuals' data exposed. $8 million class action settlement.",
+    "source": "https://techcrunch.com/2024/01/04/orrick-law-firm-data-breach/"
+  },
+  {
+    "key": "fragomen-immigration-2020",
+    "category": "legal-professional",
+    "name": "Fragomen Immigration Law Firm (2020)",
+    "summary": "Immigration law firm Fragomen, Del Rey, Bernsen & Loewy disclosed that an unauthorised individual accessed I-9 employment verification files for Google employees, exposing names, SSNs, passport numbers, and other immigration identifiers.",
+    "impact": "Undisclosed number of current and former Google employees had SSNs, passport numbers, and immigration documents exposed.",
+    "source": "https://techcrunch.com/2020/10/26/fragomen-data-breach-google-employees/"
+  },
+  {
+    "key": "bryan-cave-mondelez-2023",
+    "category": "legal-professional",
+    "name": "Bryan Cave Leighton Paisner (2023)",
+    "summary": "A February 2023 data breach at global law firm Bryan Cave resulted in unauthorized access to personal employee data of its client Mondel\u0113z International, the Cadbury and Oreo parent company.",
+    "impact": "51,000+ current and former Mondel\u0113z employees affected. $750,000 settlement.",
+    "source": "https://www.imageoneway.com/blog/law-firm-data-breaches"
+  },
+  {
+    "key": "hwl-ebsworth-2023",
+    "category": "legal-professional",
+    "name": "HWL Ebsworth (2023)",
+    "summary": "One of Australia's largest law firms suffered a ransomware attack in April 2023. Attackers accessed and exfiltrated over 4TB of data including employee resumes, IDs, financial reports, client documentation, and credit card information.",
+    "impact": "4TB+ of data stolen including client legal documents, financial reports, employee IDs, and credit card information from one of Australia's largest firms.",
+    "source": "https://arcticwolf.com/resources/blog/top-legal-industry-cyber-attacks/"
+  },
+  {
+    "key": "gunster-law-firm-2022",
+    "category": "legal-professional",
+    "name": "Gunster, Yoakley & Stewart (2022)",
+    "summary": "Cybercriminals gained access to Gunster's systems in November 2022, compromising the personal data of current and former clients of the Florida-based law firm.",
+    "impact": "9,550 individuals affected. $8.5 million settlement fund established.",
+    "source": "https://www.msba.org/site/site/content/News-and-Publications/News/General-News/Law_Firm_Settles_Data_Breach_Lawsuit_A_Warning_for_Legal_Professionals.aspx"
+  },
+  {
+    "key": "subdomailing-2024",
+    "category": "subdomain-takeover",
+    "name": "SubdoMailing Campaign (2024)",
+    "summary": "Guardio Labs uncovered a massive phishing campaign exploiting dangling DNS records on 8,000+ legitimate domains including MSN, VMware, McAfee, Cornell University, UNICEF, and eBay. The 'ResurrecAds' threat actor registered expired domains pointed to by abandoned CNAME records.",
+    "impact": "5 million fraudulent emails sent daily from 8,000+ hijacked domains and 13,000+ subdomains of trusted brands. Used for ad fraud and phishing.",
+    "source": "https://thehackernews.com/2024/02/8000-subdomains-of-trusted-brands.html"
+  },
+  {
+    "key": "aws-s3-subdomain-2024",
+    "category": "subdomain-takeover",
+    "name": "AWS S3 Dangling DNS Research (2024-2025)",
+    "summary": "Researchers found ~150 deleted S3 buckets still referenced by DNS records of major corporations and government agencies. Over 8 million HTTP requests were made to these non-existent buckets seeking critical resources like container images and VPN configs.",
+    "impact": "8 million requests to dangling resources from major organisations. Potential for supply chain attacks via re-registered bucket names serving malicious content.",
+    "source": "https://www.sentinelone.com/blog/re-assessing-risk-subdomain-takeovers-as-supply-chain-attacks/"
+  },
+  {
+    "key": "sentinelone-subdomain-stats-2024",
+    "category": "subdomain-takeover",
+    "name": "SentinelOne Subdomain Risk Report (2024)",
+    "summary": "SentinelOne's monitoring detected over 1,250 instances of subdomain takeover risk from deprovisioned cloud resources and 650+ from other causes across their client base in a single year.",
+    "impact": "1,900+ subdomain takeover risks identified across enterprise clients, each representing a potential phishing or malware distribution vector.",
+    "source": "https://www.securityweek.com/dangling-dns-used-to-hijack-subdomains-of-major-organizations/"
+  },
+  {
+    "key": "t-mobile-api-2023",
+    "category": "api-exposure",
+    "name": "T-Mobile (2023)",
+    "summary": "Attackers exploited a vulnerable API to exfiltrate customer data for 6 weeks before detection. The API lacked proper authentication controls, allowing bulk retrieval of customer records including names, billing addresses, and account details.",
+    "impact": "37 million customer accounts compromised. Data included names, billing addresses, email, phone numbers, dates of birth, and account numbers.",
+    "source": "https://www.bleepingcomputer.com/news/security/t-mobile-hacked-to-steal-data-of-37-million-accounts-in-api-data-breach/"
+  },
+  {
+    "key": "optus-api-2022",
+    "category": "api-exposure",
+    "name": "Optus Australia (2022)",
+    "summary": "A coding error in access controls on an API connecting the Optus customer portal to a backend database allowed unauthenticated access. The Australian government described it as a basic security failure rather than a sophisticated attack.",
+    "impact": "9.8 million customers affected (a third of Australia's population). 2.1 million had identity documents stolen. A$140 million reserved for breach costs.",
+    "source": "https://en.wikipedia.org/wiki/2022_Optus_data_breach"
+  },
+  {
+    "key": "peloton-api-2021",
+    "category": "api-exposure",
+    "name": "Peloton (2021)",
+    "summary": "Peloton's API allowed unauthenticated requests to retrieve any user's account data even when profiles were set to private. The company ignored the 90-day disclosure deadline and only patched after media contacted them.",
+    "impact": "3 million+ Peloton users' private data (age, gender, city, weight, workout stats, birthday) accessible to any unauthenticated request.",
+    "source": "https://techcrunch.com/2021/05/05/peloton-bug-account-data-leak/"
+  },
+  {
+    "key": "panera-bread-api-2018",
+    "category": "api-exposure",
+    "name": "Panera Bread (2018)",
+    "summary": "Unauthenticated API endpoints on panerabread.com leaked customer records in plaintext. Security researcher Dylan Houlihan reported it in August 2017 but Panera sat on the vulnerability for 8 months before Krebs on Security published the story.",
+    "impact": "37 million customer records exposed in plaintext including names, email/physical addresses, birthdays, and last four digits of credit cards.",
+    "source": "https://krebsonsecurity.com/2018/04/panerabread-com-leaks-millions-of-customer-records/"
+  },
+  {
+    "key": "graphql-escape-research-2023",
+    "category": "api-exposure",
+    "name": "GraphQL API Exposure Study (2023)",
+    "summary": "Escape's scan of 1,500+ GraphQL endpoints revealed 46,000+ security issues and sensitive data leaks, all accessible without authentication. 10% were classified as critical. Over 4,000 exposed secrets including access tokens, passwords, and credit card numbers.",
+    "impact": "46,000+ security issues across 1,500 GraphQL endpoints. 4,000+ exposed secrets including passwords and credit card numbers in API responses.",
+    "source": "https://nordicapis.com/the-state-of-graphql-security-in-2024/"
+  },
+  {
+    "key": "polyfill-io-2024",
+    "category": "supply-chain",
+    "name": "Polyfill.io (2024)",
+    "summary": "After Chinese company Funnull acquired the polyfill.io domain in February 2024, the CDN began injecting malware into the polyfill.js library served to websites. The malicious code only triggered on mobile devices and evaded detection by hiding from analytics tools and admin users.",
+    "impact": "380,000+ hosts embedding the malicious script. Affected domains included WarnerBros, Hulu, Mercedes-Benz, and Pearson. Cloudflare issued emergency rewrite rules.",
+    "source": "https://thehackernews.com/2024/07/polyfillio-attack-impacts-over-380000.html"
+  },
+  {
+    "key": "solarwinds-2020",
+    "category": "supply-chain",
+    "name": "SolarWinds / SUNBURST (2020)",
+    "summary": "Russian intelligence (SVR) compromised SolarWinds' build system and injected a backdoor (SUNBURST) into Orion software updates distributed to 18,000 customers. The trojanised updates were signed with valid certificates and went undetected for 14+ months.",
+    "impact": "18,000 organisations received compromised updates. High-value targets included US Treasury, Commerce, Homeland Security, and Microsoft. 14 months of undetected access.",
+    "source": "https://www.gao.gov/blog/solarwinds-cyberattack-demands-significant-federal-and-private-sector-response-infographic"
+  },
+  {
+    "key": "event-stream-npm-2018",
+    "category": "supply-chain",
+    "name": "event-stream npm Package (2018)",
+    "summary": "A social engineering attack: an attacker gained maintainership of the popular event-stream npm package by offering to help the original maintainer. They added a malicious dependency (flatmap-stream) that targeted the Copay cryptocurrency wallet, stealing Bitcoin from wallets with balances over 100 BTC.",
+    "impact": "Malicious code deployed to Copay wallet versions 5.0.2-5.1.0. Package had 2 million weekly downloads. The attack went undetected for over 2 months.",
+    "source": "https://blog.npmjs.org/post/180565383195/details-about-the-event-stream-incident"
+  },
+  {
+    "key": "codecov-2021",
+    "category": "supply-chain",
+    "name": "Codecov (2021)",
+    "summary": "Attackers exploited an error in Codecov's Docker image creation process to extract credentials, then modified the Bash Uploader script to exfiltrate environment variables from every CI/CD pipeline that ran it. The tampering went undetected for 2 months.",
+    "impact": "All credentials, tokens, and keys in CI environments of Codecov customers exposed for 2 months. Affected customers included Twilio, HashiCorp, and others.",
+    "source": "https://about.codecov.io/apr-2021-post-mortem/"
+  },
+  {
+    "key": "kaseya-vsa-2021",
+    "category": "supply-chain",
+    "name": "Kaseya VSA (2021)",
+    "summary": "REvil ransomware exploited CVE-2021-30116 in Kaseya's VSA remote management software to push ransomware through MSPs to their downstream clients. Kaseya had been warned about the vulnerabilities but hadn't completed patching.",
+    "impact": "800-1,500 downstream businesses affected. Swedish supermarket Coop closed 800 stores for a week. REvil demanded $70 million ransom.",
+    "source": "https://en.wikipedia.org/wiki/Kaseya_VSA_ransomware_attack"
+  },
+  {
+    "key": "moveit-2023",
+    "category": "supply-chain",
+    "name": "MOVEit Transfer (2023)",
+    "summary": "Cl0p ransomware group exploited a zero-day SQL injection (CVE-2023-34362) in Progress Software's MOVEit file transfer platform. They installed a web shell called LEMURLOOT to exfiltrate data, skipping encryption entirely and focusing on data theft for extortion.",
+    "impact": "2,700+ organisations compromised. 93.3 million individuals' data exposed. Victims include BBC, British Airways, Boots, and US government agencies.",
+    "source": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa23-158a"
+  },
+  {
+    "key": "citrix-bleed-session-2023",
+    "category": "cookie-session",
+    "name": "Citrix Bleed / Session Hijack (2023)",
+    "summary": "CVE-2023-4966 in Citrix NetScaler leaked valid post-authentication session cookies from memory. Attackers could establish authenticated sessions bypassing username, password, and MFA entirely. LockBit ransomware weaponised it at scale.",
+    "impact": "CISA emergency directive. Mass exploitation by LockBit ransomware across healthcare, finance, and government. Complete MFA bypass via session token theft.",
+    "source": "https://cloud.google.com/blog/topics/threat-intelligence/session-hijacking-citrix-cve-2023-4966/"
+  },
+  {
+    "key": "microsoft-token-replay-2023",
+    "category": "cookie-session",
+    "name": "Microsoft Token Replay Attacks (2023)",
+    "summary": "Microsoft detected 147,000 token replay attacks in 2023, a 111% year-over-year increase. Attackers used infostealers (Lumma, RisePro, Vidar, RedLine) to steal session tokens from browsers, bypassing MFA by replaying valid authentication cookies.",
+    "impact": "147,000 token replay attacks detected. 17 billion stolen cookie records found on the dark web in 2024. 73% of incidents targeted cloud enterprise platforms.",
+    "source": "https://thehackernews.com/2024/09/session-hijacking-20-latest-way-that.html"
+  },
+  {
+    "key": "facebook-cookie-2022",
+    "category": "cookie-session",
+    "name": "Facebook Session Hijacking (2022)",
+    "summary": "Attackers exploited malicious third-party browser extensions to capture active session cookies from users' Facebook accounts, enabling account takeover without credentials.",
+    "impact": "Active Facebook sessions hijacked via browser extension compromise. Used for subsequent fraud and impersonation.",
+    "source": "https://cybersierra.co/blog/session-hijacking-cookies/"
+  },
+  {
+    "key": "twitter-clickjacking-2009",
+    "category": "clickjacking",
+    "name": "Twitter Clickjacking Worm (2009)",
+    "summary": "A clickjacking worm spread across Twitter by tricking users into clicking a hidden 'retweet' button overlaid on an innocent-looking page. Each click automatically retweeted the malicious link, causing viral propagation.",
+    "impact": "Massive viral spread across Twitter's user base. Demonstrated that clickjacking could enable self-propagating worms on social platforms.",
+    "source": "https://owasp.org/www-community/attacks/Clickjacking"
+  },
+  {
+    "key": "facebook-like-clickjacking",
+    "category": "clickjacking",
+    "name": "Facebook 'Like' Button Abuse (2010-2012)",
+    "summary": "Repeated clickjacking attacks abused Facebook's 'Like' button by overlaying invisible iframes on malicious pages. Users unknowingly 'liked' spam pages, which then appeared in their friends' feeds, creating a viral spam distribution network.",
+    "impact": "Millions of fraudulent 'likes' generated. Led Facebook to implement frame-busting JavaScript. Spawned the term 'likejacking'.",
+    "source": "https://www.imperva.com/learn/application-security/clickjacking/"
+  },
+  {
+    "key": "adobe-flash-clickjacking-2008",
+    "category": "clickjacking",
+    "name": "Adobe Flash Settings Clickjacking (2008)",
+    "summary": "Attackers loaded Adobe Flash Player's settings page into an invisible iframe, tricking users into clicking through security dialogs that granted webcam and microphone access to the attacker's site.",
+    "impact": "Users unknowingly granted webcam and microphone access to malicious sites. Led to the formal definition of clickjacking as an attack class.",
+    "source": "https://owasp.org/www-community/attacks/Clickjacking"
+  },
+  {
+    "key": "23andme-2023",
+    "category": "credential-stuffing",
+    "name": "23andMe (2023)",
+    "summary": "Attackers used credential stuffing to access 14,000 accounts directly, then exploited the DNA Relatives feature to scrape genetic and ancestry data from 6.9 million linked profiles. Stolen data including ethnicity estimates appeared on dark web markets, with Chinese and Ashkenazi Jewish heritage profiles specifically targeted.",
+    "impact": "6.9 million users' genetic data exposed. $30 million class action settlement. Company filed for bankruptcy. 5 years of identity monitoring offered.",
+    "source": "https://www.malwarebytes.com/blog/news/2024/09/23andme-to-pay-30-million-in-settlement-over-2023-data-breach"
+  },
+  {
+    "key": "roku-2024",
+    "category": "credential-stuffing",
+    "name": "Roku (2024)",
+    "summary": "Two waves of credential stuffing attacks hit Roku in early 2024. The first in January compromised 15,000 accounts; the second, disclosed in April, hit 576,000 accounts. Attackers used credentials from unrelated breaches to access accounts.",
+    "impact": "576,000 accounts compromised. In ~400 cases, attackers made purchases via hijacked accounts. Roku rolled out mandatory 2FA afterward.",
+    "source": "https://techcrunch.com/2024/04/12/roku-second-user-accounts-hacked/"
+  },
+  {
+    "key": "paypal-2023",
+    "category": "credential-stuffing",
+    "name": "PayPal (2023)",
+    "summary": "Credential stuffing attack between December 6-8, 2022 accessed 35,000 PayPal accounts. Attackers gained access to SSNs, tax IDs, and dates of birth stored in account profiles.",
+    "impact": "35,000 accounts breached. SSNs, tax IDs, names, addresses, and dates of birth exposed. 2 years of free Equifax identity monitoring offered.",
+    "source": "https://www.bleepingcomputer.com/news/security/paypal-accounts-breached-in-large-scale-credential-stuffing-attack/"
+  },
+  {
+    "key": "norton-lifelock-2023",
+    "category": "credential-stuffing",
+    "name": "Norton LifeLock (2023)",
+    "summary": "Credential stuffing attack in December 2022 targeted Norton LifeLock accounts, potentially exposing password manager vault contents. 925,000 accounts were locked as a precaution after detecting anomalous login attempts.",
+    "impact": "6,500+ Password Manager accounts accessed. 925,000 accounts targeted. Password vaults potentially exposed including stored credentials and secure notes.",
+    "source": "https://techcrunch.com/2023/01/15/norton-lifelock-password-manager-data/"
+  },
+  {
+    "key": "hot-topic-2023",
+    "category": "credential-stuffing",
+    "name": "Hot Topic (2023)",
+    "summary": "The clothing retailer suffered seven waves of credential stuffing attacks throughout 2023, with the largest on November 18-19 and November 25. Attackers used automated tools to test stolen credential pairs against Hot Topic's website and mobile app.",
+    "impact": "Customer names, emails, phone numbers, birth dates, addresses, order history, and partial payment card data exposed across multiple attack waves.",
+    "source": "https://www.bleepingcomputer.com/news/security/retail-chain-hot-topic-hit-by-new-credential-stuffing-attacks/"
+  },
+  {
+    "key": "apache-struts-file-upload-2023",
+    "category": "file-upload",
+    "name": "Apache Struts CVE-2023-50164 (2023)",
+    "summary": "Critical file upload vulnerability in Apache Struts 2 allowed path traversal to place malicious JSP web shells in unrestricted directories. PoC exploits were published 4 days after disclosure and exploitation attempts began the next day.",
+    "impact": "Active exploitation within days of disclosure. Attackers gained remote code execution on affected Java web applications worldwide.",
+    "source": "https://www.trendmicro.com/en_us/research/23/l/decoding-cve-2023-50164--unveiling-the-apache-struts-file-upload.html"
+  },
+  {
+    "key": "apache-struts-file-upload-2024",
+    "category": "file-upload",
+    "name": "Apache Struts CVE-2024-53677 (2024)",
+    "summary": "Another critical file upload vulnerability in Apache Struts affecting versions 2.0.0 through 6.3.0.2 allowed path traversal via manipulated upload parameters, enabling remote code execution, data exfiltration, and full system compromise.",
+    "impact": "Affects all Apache Struts versions from 2.0.0 to 6.3.0.2. Active exploitation confirmed, enabling full system takeover on unpatched servers.",
+    "source": "https://blog.qualys.com/vulnerabilities-threat-research/2024/12/16/critical-apache-struts-file-upload-vulnerability-cve-2024-53677-risks-implications-and-enterprise-countermeasures"
+  },
+  {
+    "key": "accellion-fta-2021",
+    "category": "file-upload",
+    "name": "Accellion FTA (2021)",
+    "summary": "FIN11/Cl0p exploited four zero-day vulnerabilities in Accellion's legacy File Transfer Appliance including SQL injection and OS command execution via crafted POST requests. Attackers installed the DEWMODE web shell to exfiltrate files.",
+    "impact": "~100 companies breached. 25+ suffered significant data theft. Victims include Kroger, Singtel, Reserve Bank of New Zealand, and ASIC. $8.1 million settlement.",
+    "source": "https://cloud.google.com/blog/topics/threat-intelligence/accellion-fta-exploited-for-data-theft-and-extortion/"
+  },
+  {
+    "key": "heartland-sql-injection-2008",
+    "category": "file-upload",
+    "name": "Heartland Payment Systems (2008)",
+    "summary": "SQL injection through an 8-year-old web login page allowed attackers to spend 8 months working towards the payment processing system while evading antivirus. They installed a sniffer that captured card data during processing.",
+    "impact": "134 million credit cards exposed. Over $200 million in total losses. $145 million in compensation for fraudulent payments. Albert Gonzalez sentenced to 20 years.",
+    "source": "https://www.computerworld.com/article/1555445/sql-injection-attacks-led-to-heartland-hannaford-breaches.html"
+  },
+  {
+    "key": "sec-whatsapp-2023-549m",
+    "category": "whatsapp-consumer-tools",
+    "name": "SEC Wall Street WhatsApp Fines (August 2023)",
+    "summary": "SEC and CFTC fined 13 financial firms for employees conducting business on personal WhatsApp, iMessage, and Signal without maintaining required records. Firms admitted employees routinely used off-channel messaging from at least 2019.",
+    "impact": "$549 million combined fines ($289M SEC + $260M CFTC) across 13 firms.",
+    "source": "https://www.sec.gov/newsroom/press-releases/2023-149"
+  },
+  {
+    "key": "sec-whatsapp-2024-feb",
+    "category": "whatsapp-consumer-tools",
+    "name": "SEC Off-Channel Fines (February 2024)",
+    "summary": "The SEC charged 16 broker-dealers and investment advisers for widespread failures to maintain and preserve electronic communications conducted via personal messaging apps including WhatsApp.",
+    "impact": "$81 million combined civil penalties across 16 firms.",
+    "source": "https://www.sec.gov/newsroom/press-releases/2024-98"
+  },
+  {
+    "key": "sec-whatsapp-2024-aug",
+    "category": "whatsapp-consumer-tools",
+    "name": "SEC Off-Channel Fines (August 2024)",
+    "summary": "Continuing the enforcement sweep, the SEC charged 26 more broker-dealers and investment advisers for off-channel communication recordkeeping failures involving WhatsApp, Signal, and other personal messaging platforms.",
+    "impact": "$392.75 million combined civil penalties across 26 firms. SEC cumulative off-channel fines exceed $2 billion.",
+    "source": "https://www.sec.gov/newsroom/press-releases/2024-98"
+  },
+  {
+    "key": "ofgem-morgan-stanley-2023",
+    "category": "whatsapp-consumer-tools",
+    "name": "Morgan Stanley / Ofgem UK (2023)",
+    "summary": "UK energy regulator Ofgem fined Morgan Stanley & Co. International for failures to record and retain electronic trading communications including messages sent via personal WhatsApp accounts by energy traders.",
+    "impact": "\u00a35.4 million fine from Ofgem for recordkeeping failures related to WhatsApp use.",
+    "source": "https://www.addleshawgoddard.com/en/insights/insights-briefings/2023/global-investigations/ofgem-issues-significant-fine-failures-record-retain-trader-communications-sent-whatsapp/"
+  },
+  {
+    "key": "flask-debug-rce",
+    "category": "information-disclosure",
+    "name": "Flask/Werkzeug Debug Console (Ongoing)",
+    "summary": "Flask applications deployed with DEBUG=True in production expose the Werkzeug interactive debugger console, allowing unauthenticated remote code execution. Shodan scans regularly find thousands of exposed instances.",
+    "impact": "Full remote code execution on any Flask app running with DEBUG=True. Thousands of instances found exposed on the internet via Shodan.",
+    "source": "https://medium.com/@instatunnel/sensitive-data-in-error-messages-when-your-stack-traces-give-away-the-database-schema-68c93b2d1b83"
+  },
+  {
+    "key": "retailer-debug-ransomware-2023",
+    "category": "information-disclosure",
+    "name": "Unnamed Retailer Debug Leak (2023)",
+    "summary": "A retailer's disclosure of an outdated WordPress plugin version through debug error pages led attackers to identify and exploit the specific vulnerability, resulting in a ransomware attack.",
+    "impact": "$2 million in damages from ransomware attack enabled by technology stack disclosure in debug output.",
+    "source": "https://medium.com/@instatunnel/sensitive-data-in-error-messages-when-your-stack-traces-give-away-the-database-schema-68c93b2d1b83"
+  },
+  {
+    "key": "equifax-apache-struts-2017",
+    "category": "information-disclosure",
+    "name": "Equifax / Apache Struts (2017)",
+    "summary": "Equifax failed to patch CVE-2017-5638 in Apache Struts despite a patch being available for 2 months. Internal scans on March 15 failed to identify the vulnerable system. Attackers moved laterally for 78 days undetected, partly due to expired SSL monitoring certificates.",
+    "impact": "147 million Americans' SSNs, birth dates, and addresses stolen. $1.38 billion total cost. Four Chinese military officers indicted.",
+    "source": "https://www.blackduck.com/blog/equifax-apache-struts-vulnerability-cve-2017-5638.html"
+  },
+  {
+    "key": "synology-dsm-admin-2023",
+    "category": "information-disclosure",
+    "name": "Synology DiskStation Manager (2023)",
+    "summary": "CVE-2023-2729: Synology's DSM used a weak random number generator (JavaScript Math.random) to construct admin passwords during setup, allowing attackers to predict generated passwords and gain admin access to NAS devices.",
+    "impact": "Predictable admin passwords on Synology NAS devices. Attackers could gain full administrative access to affected network storage systems.",
+    "source": "https://thehackernews.com/2023/10/new-admin-takeover-vulnerability.html"
+  },
+  {
+    "key": "indeed-open-redirect-2023",
+    "category": "open-redirect",
+    "name": "Indeed.com Open Redirect Phishing (2023)",
+    "summary": "A phishing campaign targeting Microsoft 365 accounts of US executives exploited an open redirect vulnerability on Indeed.com. Malicious links routed through Indeed's legitimate domain bypassed email security filters and appeared trustworthy to recipients.",
+    "impact": "Executive-level Microsoft 365 accounts compromised at US organisations. Indeed's trusted domain reputation exploited to bypass email security.",
+    "source": "https://emailsecurity.checkpoint.com/blog/open-redirect-vulnerability"
+  },
+  {
+    "key": "google-appengine-redirect-2020",
+    "category": "open-redirect",
+    "name": "Google AppEngine Open Redirect (2020)",
+    "summary": "A phishing campaign targeting Office 365 users exploited Google's AppEngine open redirect vulnerability to route victims through legitimate Google infrastructure before delivering malicious payloads.",
+    "impact": "Office 365 credentials stolen via phishing campaign that bypassed security filters by routing through Google's trusted domain.",
+    "source": "https://emailsecurity.checkpoint.com/blog/open-redirect-vulnerability"
+  },
+  {
+    "key": "microsoft-oauth-redirect-2024",
+    "category": "open-redirect",
+    "name": "Microsoft OAuth Redirection Abuse (2024-2026)",
+    "summary": "Microsoft Defender researchers discovered phishing campaigns exploiting legitimate OAuth protocol functionality in Entra ID and Google Workspace. Attackers crafted URLs with manipulated redirect parameters to funnel users to attacker-controlled pages while appearing as legitimate SSO flows.",
+    "impact": "Enterprise Microsoft 365 and Google Workspace accounts compromised through OAuth redirect manipulation that bypasses conventional phishing defenses.",
+    "source": "https://www.microsoft.com/en-us/security/blog/2026/03/02/oauth-redirection-abuse-enables-phishing-malware-delivery/"
+  },
+  {
+    "key": "proofpoint-oauth-redirect-2020",
+    "category": "open-redirect",
+    "name": "Microsoft & GitHub OAuth Redirect Attacks (2020)",
+    "summary": "Proofpoint detected redirection attacks exploiting OAuth 2.0 implementation vulnerabilities in Microsoft and GitHub platforms. Attackers abused the OAuth authorisation flow to redirect users to credential harvesting pages.",
+    "impact": "Microsoft 365 environments compromised. OAuth flow exploited across Microsoft and GitHub platforms for credential theft.",
+    "source": "https://www.proofpoint.com/us/blog/cloud-security/microsoft-and-github-oauth-implementation-vulnerabilities-lead-redirection"
+  },
+  {
+    "key": "verkada-admin-2021",
+    "category": "admin-panel",
+    "name": "Verkada (2021)",
+    "summary": "Hard-coded 'Super Admin' credentials were stored in an unencrypted subdomain and a customer support server was left exposed to the internet. Hackers had root access to 150,000+ security cameras in Tesla factories, hospitals, jails, schools, and police stations for 36 hours.",
+    "impact": "150,000+ security cameras compromised including live feeds from Tesla, Cloudflare, Equinox, hospitals, and police stations. Root access to all connected devices.",
+    "source": "https://www.securitymagazine.com/articles/94789-verkada-breach-exposed-live-feeds-of-150000-surveillance-cameras-inside-schools-hospitals-and-more"
+  },
+  {
+    "key": "deloitte-apache-solr-2024",
+    "category": "admin-panel",
+    "name": "Deloitte / Apache Solr (2024)",
+    "summary": "Hacker 'IntelBroker' accessed Deloitte internal communications via an internet-exposed Apache Solr server that was accessible with default credentials. The server had not been configured to require authentication beyond factory defaults.",
+    "impact": "Internal Deloitte communications exfiltrated and posted on BreachForums cybercrime marketplace.",
+    "source": "https://www.securityweek.com/deloitte-says-no-threat-to-sensitive-data-after-hacker-claims-server-breach/"
+  },
+  {
+    "key": "uber-admin-takeover-2022",
+    "category": "admin-panel",
+    "name": "Uber Internal Systems (2022)",
+    "summary": "A Lapsus$ affiliate used purchased credentials and MFA fatigue (flooding the employee's phone with push notifications via WhatsApp social engineering) to access Uber's internal admin tools including AWS, GCP, Slack, SentinelOne, and the HackerOne admin console.",
+    "impact": "Full access to AWS, GCP, Google Drive, Slack, SentinelOne, HackerOne admin console, and internal dashboards. Vulnerability reports from HackerOne exfiltrated.",
+    "source": "https://blog.gitguardian.com/uber-breach-2022/"
+  },
+  {
+    "key": "cosmote-gdpr-analytics-2022",
+    "category": "session-recording",
+    "name": "Cosmote Greece (2022)",
+    "summary": "Greek DPA fined Cosmote for retaining subscriber call data for 3 months under a 'troubleshooting' pretext, then enriching it with personal identifiers. The data was subsequently breached between September 1-5, 2020.",
+    "impact": "\u20ac6 million GDPR fine to Cosmote plus \u20ac3.25 million to parent OTE. Data of 10 million+ subscribers affected.",
+    "source": "https://www.dpa.gr/en/enimerwtiko/news/fines-imposed-due-personal-data-breach-and-illegal-data-processing"
+  },
+  {
+    "key": "mailchimp-social-engineering-2023",
+    "category": "admin-panel",
+    "name": "Mailchimp (2023)",
+    "summary": "An attacker social-engineered a Mailchimp employee into revealing credentials, gaining access to the internal customer support and account administration tool. This was the third breach in 12 months using the same technique.",
+    "impact": "133 Mailchimp corporate accounts compromised, each potentially serving millions of email recipients. Third social engineering breach in 12 months.",
+    "source": "https://mailchimp.com/newsroom/january-2023-security-incident/"
+  },
+  {
+    "key": "grubhub-api-2025",
+    "category": "api-exposure",
+    "name": "Grubhub (2025)",
+    "summary": "ShinyHunters group accessed Grubhub systems through a third-party vendor integration, exploiting outdated Salesforce API endpoints and Zendesk vulnerabilities to steal data on customers, drivers, and restaurant partners.",
+    "impact": "Contact info and partial payment data for thousands of customers, drivers, and merchants exposed. Extortion demands from ShinyHunters.",
+    "source": "https://about.grubhub.com/news/our-response-to-a-third-party-vendor-incident/"
+  },
+  {
+    "key": "marriott-starwood-2018",
+    "category": "admin-panel",
+    "name": "Marriott / Starwood (2018)",
+    "summary": "Attackers had been inside Starwood's reservation system since 2014. When Marriott acquired Starwood in 2016, most of Starwood's IT security staff were laid off and the compromised system ran for another 2 years before discovery in September 2018.",
+    "impact": "383 million guest records exposed including names, passport numbers, and payment cards. ICO fine of \u00a318.4 million. ~$30 million recovery costs. FTC enforcement action in 2024.",
+    "source": "https://www.ftc.gov/news-events/news/press-releases/2024/10/ftc-takes-action-against-marriott-starwood-over-multiple-data-breaches"
+  },
+  {
+    "key": "lastpass-2022",
+    "category": "cloud-storage",
+    "name": "LastPass (2022)",
+    "summary": "Attackers first compromised a developer's laptop to steal source code and an encrypted storage key, then exploited a Plex vulnerability on a senior DevOps engineer's personal computer to install a keylogger. The captured credentials unlocked cloud storage containing encrypted customer password vaults.",
+    "impact": "Backup of all customer vault data exfiltrated including encrypted passwords and unencrypted website URLs. Subsequent cryptocurrency thefts traced to cracked master passwords from the stolen vaults.",
+    "source": "https://blog.lastpass.com/posts/notice-of-recent-security-incident"
+  },
+  {
+    "key": "twilio-smishing-2022",
+    "category": "credential-stuffing",
+    "name": "Twilio (2022)",
+    "summary": "The 0ktapus group sent SMS phishing messages to Twilio employees impersonating the IT department with fake password expiry notices. Compromised employee credentials gave access to customer data including Signal messenger users' phone numbers.",
+    "impact": "209 customers and 93 Authy users' data accessed. Part of a broader 0ktapus campaign targeting 130+ organisations. Signal users' phone numbers exposed.",
+    "source": "https://thehackernews.com/2022/08/twilio-suffers-data-breach-after.html"
+  },
+  {
+    "key": "blueleaks-netsential-2020",
+    "category": "exposed-files",
+    "name": "BlueLeaks / Netsential (2020)",
+    "summary": "A breach of web developer Netsential exposed 269GB of internal law enforcement data from 200+ US agencies including fusion centers. Data spanning 1996-2020 was published by DDoSecrets, described as the largest published hack of American law enforcement.",
+    "impact": "269GB of law enforcement data from 200+ agencies. Included intelligence bulletins, emails, personal information, and internal reports spanning 24 years.",
+    "source": "https://krebsonsecurity.com/2020/06/blueleaks-exposes-files-from-hundreds-of-police-departments/"
+  },
+  {
+    "key": "deloitte-ribridges-2024",
+    "category": "admin-panel",
+    "name": "Deloitte / RIBridges (2024)",
+    "summary": "Brain Cipher ransomware group compromised Rhode Island's RIBridges benefits system managed by Deloitte. The attacker authenticated to the non-production VPN using a non-privileged account with external IP access, then pivoted to the production environment.",
+    "impact": "Personal data of Rhode Island benefits recipients exposed including SSNs and financial information. State publicly criticised Deloitte's security practices.",
+    "source": "https://www.bankinfosecurity.com/rhode-island-slams-deloitte-over-ribridges-data-breach-a-28416"
+  },
+  {
+    "key": "taft-stettinius-2023",
+    "category": "legal-professional",
+    "name": "Taft Stettinius & Hollister (2023)",
+    "summary": "A ransomware attack in October 2023 gave attackers unauthorized access to client and personal data at the 500-attorney US law firm, exposing names, addresses, and Social Security numbers.",
+    "impact": "Nearly 6,000 individuals' SSNs, names, and addresses exposed via ransomware attack on a major US law firm.",
+    "source": "https://www.emazzanti.net/top-5-u-s-law-firm-breaches-what-happened-and-what-it-cost/"
+  },
+  {
+    "key": "kirkland-ellis-moveit-2023",
+    "category": "legal-professional",
+    "name": "Kirkland & Ellis / MOVEit (2023)",
+    "summary": "One of the world's largest law firms by revenue was caught in the MOVEit file transfer supply chain attack by Cl0p ransomware group, which exploited CVE-2023-34362 to exfiltrate files from the firm's MOVEit instance.",
+    "impact": "Confidential client data exfiltrated from one of the world's highest-grossing law firms as part of the broader MOVEit campaign affecting 2,700+ organisations.",
+    "source": "https://www.imageoneway.com/blog/law-firm-data-breaches"
+  },
+  {
+    "key": "ny-ag-accounting-firm-2025",
+    "category": "legal-professional",
+    "name": "Accounting Firm / NY AG Settlement (2025)",
+    "summary": "New York Attorney General announced a settlement with an accounting firm for failing to protect New Yorkers' personal data, including inadequate security practices that led to unauthorized access to client records.",
+    "impact": "Settlement with NY Attorney General for data protection failures affecting accounting firm clients.",
+    "source": "https://ag.ny.gov/press-release/2025/attorney-general-james-announces-settlement-accounting-firm-failing-protect-new"
+  },
+  {
+    "key": "crime-stoppers-leak-2024",
+    "category": "exposed-files",
+    "name": "Crime Stoppers Tip Data Leak (2024)",
+    "summary": "Millions of Crime Stoppers tips were found exposed online, shattering the anonymity promise of the tip submission system. The exposed data included details that could identify tipsters who had been guaranteed confidentiality.",
+    "impact": "Millions of anonymous crime tips exposed, potentially identifying tipsters who were promised complete anonymity. Physical safety risk for informants.",
+    "source": "https://cybernews.com/security/crime-stoppers-leak-exposes-millions-tips/"
+  },
+  {
+    "key": "okta-support-2023",
+    "category": "cookie-session",
+    "name": "Okta Support System (2023)",
+    "summary": "Attackers accessed Okta's customer support system via a stolen service account credential and harvested HAR files uploaded by customers for troubleshooting. The HAR files contained valid session tokens enabling session hijacking that bypassed authentication entirely.",
+    "impact": "134 Okta customers' support files accessed. 5 customers had active sessions hijacked including BeyondTrust and Cloudflare.",
+    "source": "https://sec.okta.com/articles/2023/11/unauthorized-access-oktas-support-case-management-system-root-cause/"
+  },
+  {
+    "key": "snowflake-credential-2024",
+    "category": "credential-stuffing",
+    "name": "Snowflake / UNC5537 (2024)",
+    "summary": "Attackers used credentials stolen by infostealer malware (some dating back to 2020) to log into Snowflake cloud data warehouse instances that lacked MFA. At least 165 organisations were targeted including AT&T, Ticketmaster, and Santander.",
+    "impact": "165 organisations compromised. AT&T: call records of nearly all customers. Ticketmaster: 560 million customer records. Santander: 30 million customer records.",
+    "source": "https://en.wikipedia.org/wiki/Snowflake_data_breach"
+  },
+  {
+    "key": "ticketmaster-snowflake-2024",
+    "category": "credential-stuffing",
+    "name": "Ticketmaster / Live Nation (2024)",
+    "summary": "As part of the Snowflake credential theft campaign, attackers accessed Ticketmaster's Snowflake instance and exfiltrated a database containing 560 million customer records. The data was listed for sale on BreachForums for $500,000.",
+    "impact": "560 million customer records stolen including names, addresses, phone numbers, emails, and partial payment card data.",
+    "source": "https://www.cm-alliance.com/cybersecurity-blog/snowflake-ticketmaster-santander-breaches-a-live-timeline"
+  },
+  {
+    "key": "uber-api-idor-2019",
+    "category": "api-exposure",
+    "name": "Uber API IDOR (2019)",
+    "summary": "An insecure direct object reference in Uber's API allowed anyone to retrieve a user's UUID by providing just their phone number or email address, then replay the UUID to access full account data including location tracking and ride booking.",
+    "impact": "All Uber, Uber Eats, and Uber driver accounts potentially vulnerable to complete account takeover via API. $6,500 bug bounty paid.",
+    "source": "https://latesthackingnews.com/2019/09/16/critical-vulnerability-discovered-in-the-uber-app-that-could-allow-account-takeovers/"
+  },
+  {
+    "key": "honda-api-2023",
+    "category": "api-exposure",
+    "name": "Honda E-Commerce API (2023)",
+    "summary": "Broken access controls in Honda's power equipment e-commerce platform allowed a researcher to reset passwords via API and access all dealer and customer data by simply incrementing user IDs. Private keys for Stripe, PayPal, and Authorize.net were also exposed.",
+    "impact": "21,393 customer orders, 3,588 dealer accounts, payment platform private keys, and internal financial reports exposed across all Honda dealers.",
+    "source": "https://www.bleepingcomputer.com/news/security/honda-api-flaws-exposed-customer-data-dealer-panels-internal-docs/"
+  },
+  {
+    "key": "chatgpt-redis-2023",
+    "category": "information-disclosure",
+    "name": "ChatGPT / OpenAI Redis Bug (2023)",
+    "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+    "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+    "source": "https://openai.com/index/march-20-chatgpt-outage/"
+  }
+]

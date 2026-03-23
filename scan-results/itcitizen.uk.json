@@ -1,0 +1,397 @@
+{
+  "domain": "itcitizen.uk",
+  "url": "https://itcitizen.uk",
+  "timestamp": "2026-03-23T03:20:34.613Z",
+  "durationMs": 2142,
+  "overallGrade": "F",
+  "categories": [
+    {
+      "category": "tls",
+      "grade": "C",
+      "findings": [
+        {
+          "id": "tls-no-hsts",
+          "category": "tls",
+          "severity": "high",
+          "title": "No HSTS header",
+          "detail": "Strict-Transport-Security header is missing.",
+          "risk": "First visit to the site can be intercepted on public WiFi before the HTTPS redirect. Session cookies and form data exposed.",
+          "precedent": {
+            "name": "Heartbleed / OpenSSL (2014)",
+            "summary": "CVE-2014-0160 in OpenSSL's heartbeat extension allowed remote memory disclosure, leaking private keys, session tokens, and credentials from any server running vulnerable OpenSSL. Attackers could read 64KB of server memory per request.",
+            "impact": "Community Health Systems: 4.5 million patient records stolen. Canada Revenue Agency: 900 social insurance numbers exfiltrated. Estimated 17% of all SSL web servers affected.",
+            "source": "https://en.wikipedia.org/wiki/Heartbleed"
+          },
+          "remediation": "Add Strict-Transport-Security: max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "id": "tls-no-http-redirect",
+          "category": "tls",
+          "severity": "medium",
+          "title": "HTTP does not redirect to HTTPS",
+          "detail": "Port 80 does not redirect to port 443.",
+          "risk": "Users who type the domain without https:// get an unencrypted connection.",
+          "remediation": "Add a 301 redirect from HTTP to HTTPS."
+        }
+      ],
+      "durationMs": 172
+    },
+    {
+      "category": "headers",
+      "grade": "C",
+      "findings": [
+        {
+          "id": "headers-no-csp",
+          "category": "headers",
+          "severity": "high",
+          "title": "No Content-Security-Policy",
+          "detail": "CSP header is missing. The browser has no restrictions on which scripts can execute.",
+          "risk": "A single injected script (XSS, compromised CDN, malicious ad) can steal every piece of data on the page — form inputs, session tokens, document uploads.",
+          "precedent": {
+            "name": "SolarWinds / SUNBURST (2020)",
+            "summary": "Russian intelligence (SVR) compromised SolarWinds' build system and injected a backdoor (SUNBURST) into Orion software updates distributed to 18,000 customers. The trojanised updates were signed with valid certificates and went undetected for 14+ months.",
+            "impact": "18,000 organisations received compromised updates. High-value targets included US Treasury, Commerce, Homeland Security, and Microsoft. 14 months of undetected access.",
+            "source": "https://www.gao.gov/blog/solarwinds-cyberattack-demands-significant-federal-and-private-sector-response-infographic"
+          },
+          "remediation": "Add a Content-Security-Policy header. Start with: default-src 'self'; script-src 'self'"
+        },
+        {
+          "id": "headers-no-frame-protection",
+          "category": "headers",
+          "severity": "medium",
+          "title": "No clickjacking protection",
+          "detail": "Neither X-Frame-Options nor CSP frame-ancestors is set.",
+          "risk": "An attacker can embed your site inside their own page invisibly. Your clients think they're clicking buttons on your site while actually authorising actions on the attacker's page — transferring money, changing passwords, submitting documents.",
+          "precedent": {
+            "name": "Adobe Flash Settings Clickjacking (2008)",
+            "summary": "Attackers loaded Adobe Flash Player's settings page into an invisible iframe, tricking users into clicking through security dialogs that granted webcam and microphone access to the attacker's site.",
+            "impact": "Users unknowingly granted webcam and microphone access to malicious sites. Led to the formal definition of clickjacking as an attack class.",
+            "source": "https://owasp.org/www-community/attacks/Clickjacking"
+          },
+          "remediation": "Add X-Frame-Options: DENY or frame-ancestors 'none' to your CSP. This is a one-line server configuration change."
+        },
+        {
+          "id": "headers-no-nosniff",
+          "category": "headers",
+          "severity": "low",
+          "title": "Missing X-Content-Type-Options: nosniff",
+          "detail": "Browser may interpret uploaded files as executable content.",
+          "risk": "Uploaded files (PDFs, images) could be misinterpreted as executable code by the browser. An attacker who uploads a malicious file could trick the browser into running it as a script.",
+          "precedent": {
+            "name": "British Airways (2018)",
+            "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+            "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+            "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+          },
+          "remediation": "Add X-Content-Type-Options: nosniff to your server headers. One-line configuration change."
+        },
+        {
+          "id": "headers-no-referrer-policy",
+          "category": "headers",
+          "severity": "low",
+          "title": "No Referrer-Policy",
+          "detail": "Browser default referrer behaviour sends the full URL (including query params) to external sites.",
+          "risk": "Every time someone clicks a link on your site that goes to another website, the full page URL they were on is sent to that other site. If your URLs contain client names, reference numbers, or internal paths, those leak to every external link and third-party script on the page.",
+          "precedent": {
+            "name": "ChatGPT / OpenAI Redis Bug (2023)",
+            "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+            "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+            "source": "https://openai.com/index/march-20-chatgpt-outage/"
+          },
+          "remediation": "Add Referrer-Policy: strict-origin-when-cross-origin to your server headers. Stops URLs leaking while keeping basic referrer data for analytics."
+        },
+        {
+          "id": "headers-no-permissions-policy",
+          "category": "headers",
+          "severity": "low",
+          "title": "No Permissions-Policy",
+          "detail": "Browser features (camera, microphone, geolocation) are not explicitly restricted.",
+          "risk": "Without this header, a compromised page could silently activate a visitor's camera, microphone, or GPS. The browser allows these by default unless you explicitly block them.",
+          "precedent": {
+            "name": "British Airways (2018)",
+            "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+            "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+            "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+          },
+          "remediation": "Add Permissions-Policy: camera=(), microphone=(), geolocation=() to your server headers. Blocks device access even if the site is compromised."
+        }
+      ],
+      "durationMs": 1
+    },
+    {
+      "category": "dns",
+      "grade": "C",
+      "findings": [
+        {
+          "id": "dns-spf-softfail",
+          "category": "dns",
+          "severity": "medium",
+          "title": "SPF uses ~all (softfail)",
+          "detail": "SPF record ends with ~all instead of -all. Emails from unauthorised senders are flagged but not rejected.",
+          "risk": "Spoofed emails still land in inboxes — just with a warning that most users ignore.",
+          "precedent": {
+            "name": "FBI IC3 BEC Statistics (2024)",
+            "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+            "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+            "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+          },
+          "remediation": "Change ~all to -all to hard-fail unauthorised senders."
+        },
+        {
+          "id": "dns-dmarc-none",
+          "category": "dns",
+          "severity": "high",
+          "title": "DMARC policy is p=none",
+          "detail": "DMARC exists but policy is 'none' — failures are reported but emails are still delivered.",
+          "risk": "Your DMARC is set to monitor only — spoofed emails still land in your clients' inboxes. This is a common first step but it provides zero protection. Attackers sending fake invoices from your domain succeed just as easily as if DMARC didn't exist.",
+          "precedent": {
+            "name": "FBI IC3 BEC Statistics (2024)",
+            "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+            "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+            "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+          },
+          "remediation": "Change p=none to p=reject in your _dmarc TXT record. This tells receiving servers to block spoofed emails instead of just logging them."
+        },
+        {
+          "id": "dns-dkim-weak-key",
+          "category": "dns",
+          "severity": "medium",
+          "title": "DKIM key may be weak (selector: default)",
+          "detail": "DKIM public key appears to be 1024-bit or shorter. 2048-bit is recommended.",
+          "risk": "Short DKIM keys can be factored, allowing attackers to sign emails as this domain.",
+          "remediation": "Regenerate DKIM keys at 2048-bit minimum."
+        },
+        {
+          "id": "dns-no-dnssec",
+          "category": "dns",
+          "severity": "low",
+          "title": "DNSSEC not enabled",
+          "detail": "DNS responses are not cryptographically signed.",
+          "risk": "DNS responses can be forged (cache poisoning). An attacker could redirect the domain to a phishing site at the DNS level.",
+          "remediation": "Enable DNSSEC with your domain registrar."
+        }
+      ],
+      "durationMs": 444
+    },
+    {
+      "category": "exposed-paths",
+      "grade": "A",
+      "findings": [
+        {
+          "id": "paths-no-security-txt",
+          "category": "exposed-paths",
+          "severity": "info",
+          "title": "No security.txt",
+          "detail": "No /.well-known/security.txt found (RFC 9116).",
+          "risk": "Security researchers who find vulnerabilities have no way to report them responsibly.",
+          "remediation": "Create a security.txt with at least a Contact field."
+        }
+      ],
+      "durationMs": 905
+    },
+    {
+      "category": "third-party",
+      "grade": "A",
+      "findings": [],
+      "durationMs": 15
+    },
+    {
+      "category": "forms",
+      "grade": "A",
+      "findings": [],
+      "durationMs": 1
+    },
+    {
+      "category": "cookies",
+      "grade": "A",
+      "findings": [
+        {
+          "id": "cookies-insecure-nevercache-b39818",
+          "category": "cookies",
+          "severity": "medium",
+          "title": "Insecure cookie: nevercache-b39818",
+          "detail": "no HttpOnly flag — JavaScript can read this cookie (XSS data theft); no Secure flag — cookie sent over unencrypted HTTP; no SameSite attribute — vulnerable to CSRF attacks",
+          "risk": "Cookie missing security flags. May leak data or enable cross-site attacks.",
+          "remediation": "Set HttpOnly, Secure, and SameSite=Strict (or Lax) on all cookies."
+        }
+      ],
+      "durationMs": 0
+    }
+  ],
+  "findings": [
+    {
+      "id": "tls-no-hsts",
+      "category": "tls",
+      "severity": "high",
+      "title": "No HSTS header",
+      "detail": "Strict-Transport-Security header is missing.",
+      "risk": "First visit to the site can be intercepted on public WiFi before the HTTPS redirect. Session cookies and form data exposed.",
+      "precedent": {
+        "name": "Heartbleed / OpenSSL (2014)",
+        "summary": "CVE-2014-0160 in OpenSSL's heartbeat extension allowed remote memory disclosure, leaking private keys, session tokens, and credentials from any server running vulnerable OpenSSL. Attackers could read 64KB of server memory per request.",
+        "impact": "Community Health Systems: 4.5 million patient records stolen. Canada Revenue Agency: 900 social insurance numbers exfiltrated. Estimated 17% of all SSL web servers affected.",
+        "source": "https://en.wikipedia.org/wiki/Heartbleed"
+      },
+      "remediation": "Add Strict-Transport-Security: max-age=31536000; includeSubDomains; preload"
+    },
+    {
+      "id": "tls-no-http-redirect",
+      "category": "tls",
+      "severity": "medium",
+      "title": "HTTP does not redirect to HTTPS",
+      "detail": "Port 80 does not redirect to port 443.",
+      "risk": "Users who type the domain without https:// get an unencrypted connection.",
+      "remediation": "Add a 301 redirect from HTTP to HTTPS."
+    },
+    {
+      "id": "headers-no-csp",
+      "category": "headers",
+      "severity": "high",
+      "title": "No Content-Security-Policy",
+      "detail": "CSP header is missing. The browser has no restrictions on which scripts can execute.",
+      "risk": "A single injected script (XSS, compromised CDN, malicious ad) can steal every piece of data on the page — form inputs, session tokens, document uploads.",
+      "precedent": {
+        "name": "SolarWinds / SUNBURST (2020)",
+        "summary": "Russian intelligence (SVR) compromised SolarWinds' build system and injected a backdoor (SUNBURST) into Orion software updates distributed to 18,000 customers. The trojanised updates were signed with valid certificates and went undetected for 14+ months.",
+        "impact": "18,000 organisations received compromised updates. High-value targets included US Treasury, Commerce, Homeland Security, and Microsoft. 14 months of undetected access.",
+        "source": "https://www.gao.gov/blog/solarwinds-cyberattack-demands-significant-federal-and-private-sector-response-infographic"
+      },
+      "remediation": "Add a Content-Security-Policy header. Start with: default-src 'self'; script-src 'self'"
+    },
+    {
+      "id": "headers-no-frame-protection",
+      "category": "headers",
+      "severity": "medium",
+      "title": "No clickjacking protection",
+      "detail": "Neither X-Frame-Options nor CSP frame-ancestors is set.",
+      "risk": "An attacker can embed your site inside their own page invisibly. Your clients think they're clicking buttons on your site while actually authorising actions on the attacker's page — transferring money, changing passwords, submitting documents.",
+      "precedent": {
+        "name": "Adobe Flash Settings Clickjacking (2008)",
+        "summary": "Attackers loaded Adobe Flash Player's settings page into an invisible iframe, tricking users into clicking through security dialogs that granted webcam and microphone access to the attacker's site.",
+        "impact": "Users unknowingly granted webcam and microphone access to malicious sites. Led to the formal definition of clickjacking as an attack class.",
+        "source": "https://owasp.org/www-community/attacks/Clickjacking"
+      },
+      "remediation": "Add X-Frame-Options: DENY or frame-ancestors 'none' to your CSP. This is a one-line server configuration change."
+    },
+    {
+      "id": "headers-no-nosniff",
+      "category": "headers",
+      "severity": "low",
+      "title": "Missing X-Content-Type-Options: nosniff",
+      "detail": "Browser may interpret uploaded files as executable content.",
+      "risk": "Uploaded files (PDFs, images) could be misinterpreted as executable code by the browser. An attacker who uploads a malicious file could trick the browser into running it as a script.",
+      "precedent": {
+        "name": "British Airways (2018)",
+        "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+        "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+        "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+      },
+      "remediation": "Add X-Content-Type-Options: nosniff to your server headers. One-line configuration change."
+    },
+    {
+      "id": "headers-no-referrer-policy",
+      "category": "headers",
+      "severity": "low",
+      "title": "No Referrer-Policy",
+      "detail": "Browser default referrer behaviour sends the full URL (including query params) to external sites.",
+      "risk": "Every time someone clicks a link on your site that goes to another website, the full page URL they were on is sent to that other site. If your URLs contain client names, reference numbers, or internal paths, those leak to every external link and third-party script on the page.",
+      "precedent": {
+        "name": "ChatGPT / OpenAI Redis Bug (2023)",
+        "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
+        "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
+        "source": "https://openai.com/index/march-20-chatgpt-outage/"
+      },
+      "remediation": "Add Referrer-Policy: strict-origin-when-cross-origin to your server headers. Stops URLs leaking while keeping basic referrer data for analytics."
+    },
+    {
+      "id": "headers-no-permissions-policy",
+      "category": "headers",
+      "severity": "low",
+      "title": "No Permissions-Policy",
+      "detail": "Browser features (camera, microphone, geolocation) are not explicitly restricted.",
+      "risk": "Without this header, a compromised page could silently activate a visitor's camera, microphone, or GPS. The browser allows these by default unless you explicitly block them.",
+      "precedent": {
+        "name": "British Airways (2018)",
+        "summary": "Magecart attackers injected malicious JavaScript into the Modernizr library on BA's payment page, skimming card details from every customer who checked out over a 15-day period. Initial access came via a Swissport employee account without MFA.",
+        "impact": "429,000 customers' payment card details stolen including CVVs. ICO fine of £20 million (reduced from initial £183 million).",
+        "source": "https://www.theregister.com/2020/10/16/british_airways_ico_fine_20m/"
+      },
+      "remediation": "Add Permissions-Policy: camera=(), microphone=(), geolocation=() to your server headers. Blocks device access even if the site is compromised."
+    },
+    {
+      "id": "dns-spf-softfail",
+      "category": "dns",
+      "severity": "medium",
+      "title": "SPF uses ~all (softfail)",
+      "detail": "SPF record ends with ~all instead of -all. Emails from unauthorised senders are flagged but not rejected.",
+      "risk": "Spoofed emails still land in inboxes — just with a warning that most users ignore.",
+      "precedent": {
+        "name": "FBI IC3 BEC Statistics (2024)",
+        "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+        "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+        "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+      },
+      "remediation": "Change ~all to -all to hard-fail unauthorised senders."
+    },
+    {
+      "id": "dns-dmarc-none",
+      "category": "dns",
+      "severity": "high",
+      "title": "DMARC policy is p=none",
+      "detail": "DMARC exists but policy is 'none' — failures are reported but emails are still delivered.",
+      "risk": "Your DMARC is set to monitor only — spoofed emails still land in your clients' inboxes. This is a common first step but it provides zero protection. Attackers sending fake invoices from your domain succeed just as easily as if DMARC didn't exist.",
+      "precedent": {
+        "name": "FBI IC3 BEC Statistics (2024)",
+        "summary": "The FBI's Internet Crime Complaint Center reported that business email compromise remains the costliest cybercrime tracked, with attackers impersonating executives and vendors via spoofed or compromised email to redirect wire transfers.",
+        "impact": "Over $55 billion in global losses between 2013-2023. $2.7 billion in reported losses in 2024 alone. 256,256 complaints with confirmed financial loss.",
+        "source": "https://www.ic3.gov/PSA/2024/PSA240911"
+      },
+      "remediation": "Change p=none to p=reject in your _dmarc TXT record. This tells receiving servers to block spoofed emails instead of just logging them."
+    },
+    {
+      "id": "dns-dkim-weak-key",
+      "category": "dns",
+      "severity": "medium",
+      "title": "DKIM key may be weak (selector: default)",
+      "detail": "DKIM public key appears to be 1024-bit or shorter. 2048-bit is recommended.",
+      "risk": "Short DKIM keys can be factored, allowing attackers to sign emails as this domain.",
+      "remediation": "Regenerate DKIM keys at 2048-bit minimum."
+    },
+    {
+      "id": "dns-no-dnssec",
+      "category": "dns",
+      "severity": "low",
+      "title": "DNSSEC not enabled",
+      "detail": "DNS responses are not cryptographically signed.",
+      "risk": "DNS responses can be forged (cache poisoning). An attacker could redirect the domain to a phishing site at the DNS level.",
+      "remediation": "Enable DNSSEC with your domain registrar."
+    },
+    {
+      "id": "paths-no-security-txt",
+      "category": "exposed-paths",
+      "severity": "info",
+      "title": "No security.txt",
+      "detail": "No /.well-known/security.txt found (RFC 9116).",
+      "risk": "Security researchers who find vulnerabilities have no way to report them responsibly.",
+      "remediation": "Create a security.txt with at least a Contact field."
+    },
+    {
+      "id": "cookies-insecure-nevercache-b39818",
+      "category": "cookies",
+      "severity": "medium",
+      "title": "Insecure cookie: nevercache-b39818",
+      "detail": "no HttpOnly flag — JavaScript can read this cookie (XSS data theft); no Secure flag — cookie sent over unencrypted HTTP; no SameSite attribute — vulnerable to CSRF attacks",
+      "risk": "Cookie missing security flags. May leak data or enable cross-site attacks.",
+      "remediation": "Set HttpOnly, Secure, and SameSite=Strict (or Lax) on all cookies."
+    }
+  ],
+  "thirdPartyDomains": [],
+  "summary": {
+    "critical": 0,
+    "high": 3,
+    "medium": 5,
+    "low": 4,
+    "info": 1,
+    "total": 13
+  }
+}
