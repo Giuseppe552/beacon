@@ -1,5 +1,10 @@
 # beacon
 
+[![CI](https://github.com/Giuseppe552/beacon/actions/workflows/ci.yml/badge.svg)](https://github.com/Giuseppe552/beacon/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-50_passing-brightgreen)](https://github.com/Giuseppe552/beacon)
+[![Breaches](https://img.shields.io/badge/breach_precedents-100-blue)](https://github.com/Giuseppe552/beacon)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+
 Business security surface scanner. Checks TLS, HTTP headers, DNS email authentication, exposed paths, third-party tracking, form security, and cookie flags. Maps every finding to a real breach where the same weakness was exploited.
 
 ## What it does
