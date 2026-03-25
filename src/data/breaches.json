@@ -798,5 +798,129 @@
     "summary": "A race condition in the redis-py library caused ChatGPT to serve cached data belonging to other users. Conversation titles from other users appeared in chat history sidebars, and payment information of ChatGPT Plus subscribers was exposed to unrelated users.",
     "impact": "Chat history titles of other users exposed. Payment data (names, emails, last 4 card digits) of 1.2% of ChatGPT Plus subscribers leaked. Service taken offline for remediation.",
     "source": "https://openai.com/index/march-20-chatgpt-outage/"
+  },
+
+  {
+    "key": "dpp-law-2022",
+    "category": "legal-professional",
+    "name": "DPP Law, Merseyside (2022)",
+    "summary": "Criminal and family law firm handling child sexual abuse cases, fraud, and military law. Hackers entered via a single admin account created in 2001 with no MFA — the password was known only to the original vendor and the account was never audited. 32.4GB exfiltrated including court bundles, police body cam footage, DNA data, and allegations of child sexual abuse. DPP didn't know until the National Crime Agency called them. Took 43 days to report (required: 72 hours).",
+    "impact": "682 clients affected, 109 experts' data exposed. ICO fine of £60,000. Client data published on the dark web.",
+    "source": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2025/04/law-firm-fined-60-000-following-cyber-attack/",
+    "quote": "I'm now a prisoner in my own home again. In fear of my life. My family's also."
+  },
+  {
+    "key": "tuckers-solicitors-2020",
+    "category": "legal-professional",
+    "name": "Tuckers Solicitors, London (2020)",
+    "summary": "Criminal defence firm handling rape and murder cases. 972,191 files across 24,000+ court bundles encrypted by ransomware. 60 bundles exfiltrated and posted on dark web — 15 criminal, 45 civil. Bundles included medical files, witness statements, names and addresses of victims and witnesses. Failed Cyber Essentials assessment in October 2019, still unresolved 10 months later. No MFA on remote access. 5-month delay applying a critical patch.",
+    "impact": "First-ever ICO ransomware fine: £98,000. Rape and murder case witness details published on dark web marketplaces.",
+    "source": "https://www.lawgazette.co.uk/news/firm-fined-almost-100000-over-ransomware-attack-/5111806.article"
+  },
+  {
+    "key": "ssj-law-firm-ico",
+    "category": "legal-professional",
+    "name": "SSJ Law Firm (ICO reprimand)",
+    "summary": "Small law practice hacked, data breached, and fraudulent payments made using stolen client information. The firm described itself as 'a small practice' that had done its best. Even without a monetary fine, the ICO published the reprimand — reputational damage regardless of size.",
+    "impact": "ICO reprimand published. Fraudulent payments made using stolen client data. Firm named in ICO enforcement register.",
+    "source": "https://ico.org.uk/action-weve-taken/enforcement/"
+  },
+  {
+    "key": "efficient-services-escrow-2013",
+    "category": "credential-theft",
+    "name": "Efficient Services Escrow Group (2013)",
+    "summary": "Trojan malware stole online banking credentials from this Huntington Beach escrow firm. $432,215 wired to Moscow, $1.1 million wired to China. The Russia wire was recovered. The China wires were not. California's Department of Corporations gave the firm 3 days to replace the stolen funds. They couldn't. The state shut them down. Entire staff of nine laid off.",
+    "impact": "$1.5 million stolen. Business forced to close within days. All nine employees lost their jobs. State-appointed receiver.",
+    "source": "https://krebsonsecurity.com/2013/08/1-5-million-cyberheist-ruins-escrow-firm/"
+  },
+  {
+    "key": "bargains-group-2016",
+    "category": "xss",
+    "name": "Bargains Group Ltd, Toronto (2016)",
+    "summary": "Website hijacked. Malicious code injected across approximately 3,000 pages, redirecting traffic to a European financial company. Google blacklisted the site. The company lost an estimated 25 new clients per day from search — roughly $1 million in revenue. The owner tried to restore the site but attackers returned multiple times.",
+    "impact": "Estimated $1 million in lost revenue. Google blacklisted the domain. Months to recover search visibility.",
+    "source": "https://www.theglobeandmail.com/report-on-business/youve-been-hacked-a-small-business-owners-worst-nightmare/article36549213/",
+    "quote": "We were wiped off the map. From a credibility perspective, wow, what an effect this had. I don't know if you ever recover."
+  },
+  {
+    "key": "orion-sa-bec-2024",
+    "category": "email-spoofing",
+    "name": "Orion S.A. (2024)",
+    "summary": "A non-executive employee at this Luxembourg carbon black manufacturer was targeted by a business email compromise attack, resulting in multiple fraudulent outbound wire transfers totalling $60 million. The employee believed they were following legitimate instructions from management.",
+    "impact": "$60 million in fraudulent wire transfers. Disclosed in SEC filing. Recovery status unknown.",
+    "source": "https://techcrunch.com/2024/08/14/texas-firm-says-it-lost-60m-in-a-bank-wire-transfer-scam/"
+  },
+  {
+    "key": "wright-hotels-bec-2015",
+    "category": "email-spoofing",
+    "name": "Wright Hotels, Seattle (2015)",
+    "summary": "Attackers compromised the owner's email account and used his Outlook calendar to identify when he was in meetings. They impersonated him to his bookkeeper, authorising wire transfers to China. JPMorgan Chase declined to reimburse, stating the bank followed the agreed-upon transfer protocol.",
+    "impact": "More than $1 million stolen via wire transfers to China. Bank refused to reimburse. No recovery.",
+    "source": "https://www.npr.org/sections/alltechconsidered/2015/09/15/440252972/when-cyber-fraud-hits-businesses-banks-may-not-offer-protection"
+  },
+  {
+    "key": "patco-construction-2009",
+    "category": "email-spoofing",
+    "name": "PATCO Construction (2009)",
+    "summary": "ZeuS trojan stole online banking credentials. $588,000 stolen in fraudulent ACH transfers over 7 days. The bank recovered $243,406 but the remaining $345,445 was gone. PATCO sued. The First Circuit Court of Appeals found the bank's security measures were not 'commercially reasonable.' Landmark case in US commercial banking cyber-liability law.",
+    "impact": "$588,000 stolen. Net unrecovered loss of $345,445 before settlement. Bank ultimately reimbursed after appeal. 3-year legal battle.",
+    "source": "https://krebsonsecurity.com/tag/patco-construction/"
+  },
+  {
+    "key": "ofii-france-2026",
+    "category": "legal-professional",
+    "name": "French Immigration Agency OFII (2026)",
+    "summary": "Breach originated at a private training provider that administers language and civics courses for France's integration contract. The hacker posted samples on a crime forum claiming data on up to 2 million people. OFII confirmed the breach but disputes the scope, saying fewer than 1,000. Leaked data includes names, phone numbers, dates of birth, nationalities, and reasons for stay.",
+    "impact": "Personal data of foreign residents in France exposed on crime forums. Names, nationalities, and immigration reasons leaked — data that could endanger individuals in their countries of origin.",
+    "source": "https://www.visahq.com/news/2026-01-06/fr/cyber-attack-on-french-immigration-agency-exposes-foreign-residents-personal-data/"
+  },
+  {
+    "key": "ice-asylum-seekers-2022",
+    "category": "legal-professional",
+    "name": "US ICE Asylum Seeker Data Leak (2022)",
+    "summary": "During routine website updates, ICE accidentally published a document containing names, birthdates, nationalities, and detention locations for 6,252 asylum seekers. The file was publicly accessible for approximately 5 hours. Over 100 of the affected individuals had already been deported before the breach was discovered.",
+    "impact": "6,252 asylum seekers' identities, nationalities, and locations exposed on a government website. Data included people who had fled violence — exposure could endanger them or their families in their countries of origin.",
+    "source": "https://www.axios.com/2022/11/30/ice-asylum-seekers-data-breach"
+  },
+  {
+    "key": "chris-ingram-law-2025",
+    "category": "legal-professional",
+    "name": "Chris M. Ingram Law Offices (2025)",
+    "summary": "California entertainment and immigration law firm. Suspicious network activity detected February 7, 2025. Confirmed unauthorised access to server containing client information. The firm waited 75 days to notify those affected and had not yet revealed what information was taken at time of the class action filing.",
+    "impact": "Class action filed by 100+ current and former clients. 75-day notification delay for clients whose passport data, visa applications, and personal information may have been compromised.",
+    "source": "https://news.bloomberglaw.com/litigation/california-immigration-law-firm-sued-over-february-data-breach"
+  },
+  {
+    "key": "ransomware-psychological-harms-2024",
+    "category": "credential-theft",
+    "name": "Oxford Academic Ransomware Harms Study (2024)",
+    "summary": "Peer-reviewed qualitative study interviewing ransomware victims across SMEs and public sector organisations. Found that ransomware attacks cause severe psychological harm including PTSD, suicidal ideation, heart attacks, and hospitalisation. Staff forced to sleep at offices, consuming 'copious amounts of caffeine to function.' One in seven employees had symptoms severe enough to need professional psychological help. 20% of victim organisations used trauma counselling services.",
+    "impact": "Documented psychological impacts: PTSD, suicidal ideation, cardiovascular events, prolonged sleep deprivation. Peer-reviewed evidence that cyber attacks are a health crisis, not just a technical one.",
+    "source": "https://academic.oup.com/cybersecurity/article/10/1/tyae013/7723878",
+    "quote": "I was at times suicidal. I think I came as close to suicide as somebody who would never commit suicide would."
+  },
+  {
+    "key": "georgia-cpa-ransomware",
+    "category": "credential-theft",
+    "name": "Georgia CPA Firm (ransomware)",
+    "summary": "Employee at a small CPA firm in Georgia clicked a malicious link. All client data — tax returns, SSNs, bank account details — encrypted by ransomware. Original demand: $700,000. Negotiated to $450,000 and paid. Hackers returned access to files.",
+    "impact": "$450,000 ransom paid. All client financial data held hostage. Firm operations halted until payment.",
+    "source": "https://www.accountingtoday.com/list/cybersecurity-for-cpas-one-expensive-click"
+  },
+  {
+    "key": "accounting-firm-double-ransomware",
+    "category": "credential-theft",
+    "name": "Unnamed Accounting Firm (double ransomware)",
+    "summary": "Firm with two offices, 50 employees total. Hit by ransomware at both sites simultaneously. $300,000 demand per site, $600,000 total. 24-hour deadline. Root cause: the IT provider had set up default Windows Remote Desktop during COVID with no MFA, no VPN, and a consumer-grade router as a firewall. All operations stopped — no one could work.",
+    "impact": "$600,000 ransom demand. Both offices simultaneously paralysed. All client data including tax returns and SSNs at risk.",
+    "source": "https://esudo.com/resources/accounting-firm-hit-with300000-ransomware-twice/"
+  },
+  {
+    "key": "uk-solicitor-invoice-fraud-2022-2024",
+    "category": "email-spoofing",
+    "name": "UK Solicitor Invoice Fraud (2022–2024)",
+    "summary": "Multiple UK law firms lost client funds when attackers intercepted email chains and sent invoices from spoofed firm email addresses. Attackers monitored firm email for ongoing property transactions, then sent clients a 'change of bank details' notice at the exact moment a completion payment was due. Without SPF, DKIM, or DMARC, the spoofed emails were indistinguishable from real ones.",
+    "impact": "£150M+ lost across UK legal sector (SRA estimate). Individual losses range from £30,000 to £500,000+ per transaction. Most funds unrecoverable.",
+    "source": "https://www.sra.org.uk/consumers/problems/fraud-scams/"
   }
 ]

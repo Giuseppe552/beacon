@@ -29,6 +29,8 @@ export type BreachPrecedent = {
   impact?: string;
   /** Source URL (ICO report, news article, CVE). */
   source?: string;
+  /** Direct quote from a victim, client, or investigator. The human cost. */
+  quote?: string;
 };
 
 export type ScanCategory =
@@ -93,4 +95,6 @@ export type ScanContext = {
   statusCode: number;
   /** Whether the site redirects HTTP to HTTPS. */
   httpsRedirect: boolean;
+  /** Industry context for risk text and severity adjustment. */
+  industry?: string;
 };

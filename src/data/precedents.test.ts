@@ -31,6 +31,17 @@ describe("BREACHES", () => {
     const keys = new Set(BREACHES.map((b) => b.key));
     expect(keys.has("ba-magecart-2018")).toBe(true);
     expect(keys.has("ticketmaster-magecart-2018")).toBe(true);
+    expect(keys.has("dpp-law-2022")).toBe(true);
+    expect(keys.has("tuckers-solicitors-2020")).toBe(true);
+    expect(keys.has("orion-sa-bec-2024")).toBe(true);
+    expect(keys.has("uk-solicitor-invoice-fraud-2022-2024")).toBe(true);
+  });
+
+  it("includes human-impact quotes on key entries", () => {
+    const withQuotes = BREACHES.filter((b) => b.quote);
+    expect(withQuotes.length).toBeGreaterThanOrEqual(3);
+    const dpp = BREACHES.find((b) => b.key === "dpp-law-2022");
+    expect(dpp?.quote).toContain("prisoner");
   });
 });
 

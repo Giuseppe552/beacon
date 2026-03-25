@@ -8,6 +8,7 @@ export type BreachEntry = {
   summary: string;
   impact: string;
   source: string;
+  quote?: string;
 };
 
 /** Full breach database — 100 verified incidents with cited sources. */
@@ -26,17 +27,17 @@ const FINDING_TO_BREACH_CATEGORIES: Record<string, string[]> = {
   "headers-no-nosniff": ["xss"],
   "headers-no-referrer-policy": ["information-disclosure"],
   "headers-no-permissions-policy": ["xss"],
-  "headers-server-version": ["information-disclosure"],
-  "headers-x-powered-by": ["information-disclosure"],
+  "headers-server-version": ["information-disclosure", "credential-theft"],
+  "headers-x-powered-by": ["information-disclosure", "credential-theft"],
 
   // TLS scanner
   "tls-outdated-protocol": ["tls-downgrade"],
-  "tls-no-hsts": ["tls-downgrade"],
+  "tls-no-hsts": ["tls-downgrade", "credential-theft"],
   "tls-hsts-short": ["tls-downgrade"],
   "tls-cert-invalid": ["certificate-issues"],
   "tls-cert-expired": ["certificate-issues"],
   "tls-cert-expiring": ["certificate-issues"],
-  "tls-no-http-redirect": ["tls-downgrade"],
+  "tls-no-http-redirect": ["tls-downgrade", "credential-theft"],
 
   // DNS scanner
   "dns-no-spf": ["email-spoofing"],
@@ -60,10 +61,10 @@ const FINDING_TO_BREACH_CATEGORIES: Record<string, string[]> = {
   "paths-backup-sql": ["exposed-files", "cloud-storage"],
   "paths-dump-sql": ["exposed-files"],
   "paths-phpinfo-php": ["information-disclosure"],
-  "paths-wp-admin": ["wordpress-cms", "admin-panel"],
-  "paths-wp-login-php": ["wordpress-cms", "credential-stuffing"],
-  "paths-admin": ["admin-panel"],
-  "paths-phpmyadmin": ["admin-panel"],
+  "paths-wp-admin": ["wordpress-cms", "admin-panel", "credential-theft"],
+  "paths-wp-login-php": ["wordpress-cms", "credential-stuffing", "credential-theft"],
+  "paths-admin": ["admin-panel", "credential-theft"],
+  "paths-phpmyadmin": ["admin-panel", "credential-theft"],
   "paths-graphql": ["api-exposure"],
   "paths-swagger-json": ["api-exposure"],
   "paths-api-docs": ["api-exposure"],
@@ -148,5 +149,6 @@ function matchBreaches(categories: string[]): BreachPrecedent[] {
     summary: b.summary,
     impact: b.impact,
     source: b.source,
+    ...(b.quote ? { quote: b.quote } : {}),
   }));
 }
