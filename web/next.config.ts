@@ -3,7 +3,6 @@ import path from "node:path";
 
 const nextConfig: NextConfig = {
   transpilePackages: [path.resolve(__dirname, "../src")],
-  serverExternalPackages: ["node-html-parser"],
   // Turbopack: resolve .js imports to .ts source files
   turbopack: {
     resolveExtensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
