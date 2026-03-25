@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
       ".js": [".ts", ".js"],
       ".mjs": [".mts", ".mjs"],
     };
+    // Scanners in ../src/ import node-html-parser, but on Vercel only
+    // web/node_modules exists. Tell webpack to also look here.
+    config.resolve.modules = [
+      ...(config.resolve.modules ?? []),
+      path.resolve(__dirname, "node_modules"),
+    ];
     return config;
   },
 };
