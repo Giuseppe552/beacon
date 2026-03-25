@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { scan, type ScanProgress } from "./scan.js";
 import type { Finding, Grade, ScanReport, Severity } from "./types.js";
+import { type Industry, INDUSTRY_PROFILES } from "./industry.js";
+import { GRADE_EXPLANATIONS, SEVERITY_EXPLANATIONS } from "./grade.js";
 
 // ── Colours ──────────────────────────────────────────────────────────
 
@@ -47,9 +49,11 @@ function usage(): void {
   const w = process.stderr.write.bind(process.stderr);
   w(`\n${B}beacon${R} — business security surface scanner\n\n`);
   w(`${B}Usage:${R}\n`);
-  w(`  beacon <domain>              Scan and print report\n`);
-  w(`  beacon <domain> --json       Output JSON\n`);
-  w(`  beacon <domain> -v           Verbose\n\n`);
+  w(`  beacon <domain>                          Scan and print report\n`);
+  w(`  beacon <domain> --industry immigration   Scan with industry context\n`);
+  w(`  beacon <domain> --json                   Output JSON\n`);
+  w(`  beacon <domain> -v                       Verbose\n\n`);
+  w(`${B}Industries:${R}  immigration, law, accounting, healthcare, general\n\n`);
   w(`${D}https://giuseppegiona.com/projects/beacon${R}\n\n`);
 }
 
@@ -70,9 +74,27 @@ async function main() {
   const json = args.includes("--json");
   const verbose = args.includes("-v") || args.includes("--verbose");
 
+  // Parse --industry flag
+  const industryIdx = args.indexOf("--industry");
+  const industryArg = industryIdx !== -1 ? args[industryIdx + 1] : undefined;
+  const validIndustries = Object.keys(INDUSTRY_PROFILES) as Industry[];
+  const industry: Industry = industryArg && validIndustries.includes(industryArg as Industry)
+    ? (industryArg as Industry)
+    : "general";
+
+  if (industryArg && !validIndustries.includes(industryArg as Industry)) {
+    process.stderr.write(`  ${YEL}Warning:${R} unknown industry "${industryArg}". Using general.\n`);
+    process.stderr.write(`  ${D}Valid: ${validIndustries.join(", ")}${R}\n\n`);
+  }
+
   // Banner
-  process.stderr.write(`\n  ${B}beacon${R}  ${D}v0.1.0${R}\n`);
-  process.stderr.write(`  ${D}target${R}  ${B}${clean}${R}\n\n`);
+  const profile = INDUSTRY_PROFILES[industry];
+  process.stderr.write(`\n  ${B}beacon${R}  ${D}v0.2.0${R}\n`);
+  process.stderr.write(`  ${D}target${R}  ${B}${clean}${R}\n`);
+  if (industry !== "general") {
+    process.stderr.write(`  ${D}industry${R}  ${B}${profile.name}${R}\n`);
+  }
+  process.stderr.write(`\n`);
 
   // Spinner
   const spinner = json ? null : createSpinner();
@@ -81,6 +103,7 @@ async function main() {
   try {
     const report = await scan(clean, {
       verbose,
+      industry,
       onProgress: (p) => spinner?.update(p),
     });
     spinner?.stop();
@@ -146,8 +169,20 @@ async function render(r: ScanReport): Promise<void> {
   o();
   await wait(200);
 
-  // ── Findings (each finding paced) ──
+  // ── Severity legend ──
+  o(`  ${D}─── What the severity levels mean ───${R}`);
+  o();
+  const activeSevs = new Set(r.findings.map((f) => f.severity));
   const sevOrder: Severity[] = ["critical", "high", "medium", "low", "info"];
+  for (const sev of sevOrder) {
+    if (!activeSevs.has(sev)) continue;
+    const ex = SEVERITY_EXPLANATIONS[sev];
+    o(`  ${SEV[sev]}${B} ${ex.label} ${R}  ${D}${ex.meaning}${R}`);
+  }
+  o();
+  await wait(200);
+
+  // ── Findings (each finding paced) ──
   for (const sev of sevOrder) {
     const sf = r.findings.filter((f) => f.severity === sev);
     if (sf.length === 0) continue;
@@ -182,42 +217,31 @@ async function render(r: ScanReport): Promise<void> {
 function renderVerdict(r: ScanReport): void {
   const o = console.log;
   const g = r.overallGrade;
+  const ex = GRADE_EXPLANATIONS[g];
 
-  let lines: string[];
-  if (g === "A") {
-    lines = [
-      "Strong security posture. No critical or high-severity issues.",
-      "This is better than most — keep monitoring, security isn't static.",
-    ];
-  } else if (g === "B") {
-    lines = [
-      "Decent baseline with some gaps. Not an emergency, but the issues found",
-      "are the same ones attackers scan for first. Fix them before someone does.",
-    ];
-  } else if (g === "C") {
-    lines = [
-      "Significant weaknesses. Every issue listed below has caused a real data",
-      "breach at another company. An attacker scanning for easy targets would",
-      "flag this site for closer inspection.",
-    ];
-  } else if (g === "D") {
-    lines = [
-      "Serious exposure. This site has multiple weaknesses that are actively",
-      "exploited across the internet right now. The precedents below are not",
-      "hypothetical — they are documented incidents with named companies.",
-    ];
-  } else {
-    lines = [
-      "Critical failures. The weaknesses found here have caused major data",
-      "breaches, regulatory fines, and lawsuits. If this site handles client",
-      "documents, payment details, or personal data — act on this today.",
-    ];
-  }
-
-  for (const line of lines) {
-    o(`  ${I}${line}${R}`);
-  }
+  o(`  ${B}${ex.label}${R}`);
   o();
+  // Wrap meaning text at ~75 chars
+  wrapText(ex.meaning, 75).forEach((line) => o(`  ${I}${line}${R}`));
+  o();
+  wrapText(ex.action, 75).forEach((line) => o(`  ${line}`));
+  o();
+}
+
+function wrapText(text: string, width: number): string[] {
+  const words = text.split(" ");
+  const lines: string[] = [];
+  let line = "";
+  for (const word of words) {
+    if (line.length + word.length + 1 > width && line.length > 0) {
+      lines.push(line);
+      line = word;
+    } else {
+      line += (line ? " " : "") + word;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
 }
 
 function renderPriority(r: ScanReport): void {
@@ -275,6 +299,10 @@ function renderFinding(f: Finding): void {
     if (line.trim()) o(line + R);
     if (f.precedent.impact) {
       o(`     ${I}Impact: ${f.precedent.impact}${R}`);
+    }
+    if (f.precedent.quote) {
+      o();
+      o(`     ${I}"${f.precedent.quote}"${R}`);
     }
   }
 

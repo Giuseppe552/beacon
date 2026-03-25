@@ -21,13 +21,13 @@ export const cookiesScanner: Scanner = {
       const issues: string[] = [];
 
       if (!lower.includes("httponly")) {
-        issues.push("no HttpOnly flag — JavaScript can read this cookie (XSS data theft)");
+        issues.push("no HttpOnly flag — any script on the page can read this cookie");
       }
       if (!lower.includes("secure")) {
-        issues.push("no Secure flag — cookie sent over unencrypted HTTP");
+        issues.push("no Secure flag — cookie transmitted in the clear over unencrypted connections");
       }
       if (!lower.includes("samesite")) {
-        issues.push("no SameSite attribute — vulnerable to CSRF attacks");
+        issues.push("no SameSite attribute — other websites can trigger requests that carry this cookie");
       }
 
       if (issues.length > 0) {
@@ -41,8 +41,8 @@ export const cookiesScanner: Scanner = {
           title: `Insecure cookie: ${name}`,
           detail: issues.join("; "),
           risk: isSession
-            ? "Session cookie without proper flags. An XSS vulnerability or network attacker can steal the user's session."
-            : "Cookie missing security flags. May leak data or enable cross-site attacks.",
+            ? "This cookie controls who is logged in. Without these flags, an attacker who gets a script onto your page — or who is on the same WiFi — can copy this cookie and log in as your user. They see everything that user sees: account details, documents, messages."
+            : "This cookie is missing standard security flags. It can be read by scripts on the page or transmitted over unencrypted connections, potentially leaking information about your visitors.",
           remediation: "Set HttpOnly, Secure, and SameSite=Strict (or Lax) on all cookies.",
         });
       }

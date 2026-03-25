@@ -17,7 +17,7 @@ export const headersScanner: Scanner = {
         severity: "high",
         title: "No Content-Security-Policy",
         detail: "CSP header is missing. The browser has no restrictions on which scripts can execute.",
-        risk: "A single injected script (XSS, compromised CDN, malicious ad) can steal every piece of data on the page — form inputs, session tokens, document uploads.",
+        risk: "Your site has no rules about which scripts are allowed to run. If someone manages to inject code — through a compromised plugin, a hacked advertising network, or a vulnerability in your site — that code can steal every piece of data on the page: form inputs, login sessions, uploaded documents. British Airways lost 380,000 payment cards to exactly this kind of attack.",
         precedent: getPrecedent("headers-no-csp"),
         remediation: "Add a Content-Security-Policy header. Start with: default-src 'self'; script-src 'self'",
       });

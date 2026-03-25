@@ -32,7 +32,7 @@ export const tlsScanner: Scanner = {
         severity: "high",
         title: `Outdated TLS protocol: ${info.protocol}`,
         detail: `Server negotiated ${info.protocol}, which has known cryptographic weaknesses (BEAST, POODLE).`,
-        risk: "Attackers on the same network can decrypt traffic. PCI DSS banned TLS 1.0 in 2018.",
+        risk: "Anyone on the same network — a coffee shop, a hotel, an airport — can read everything your clients send through this site. Passwords, form submissions, uploaded documents. All visible.",
         precedent: getPrecedent("tls-outdated-protocol"),
         remediation: "Configure the server to accept only TLS 1.2 and 1.3.",
       });
@@ -57,7 +57,7 @@ export const tlsScanner: Scanner = {
         severity: "critical",
         title: "Invalid TLS certificate",
         detail: `Certificate validation failed: ${info.authError ?? "unknown error"}.`,
-        risk: "Browsers show a security warning. Users who click through are vulnerable to man-in-the-middle attacks.",
+        risk: "Anyone visiting your site sees a full-screen browser warning saying the connection is not private. Most people will leave immediately. The few who click through are exposed — an attacker on the same network can intercept everything they send.",
       });
     }
 
@@ -72,7 +72,7 @@ export const tlsScanner: Scanner = {
           severity: "critical",
           title: "TLS certificate expired",
           detail: `Certificate expired ${Math.abs(daysLeft)} days ago.`,
-          risk: "Browsers block access. Users cannot reach the site securely.",
+          risk: "Browsers block access to the site entirely. Clients see a warning page and cannot proceed. Equifax's expired certificate went unnoticed for 76 days — during which 147 million records were stolen without detection.",
         });
       } else if (daysLeft < 14) {
         findings.push({
@@ -81,7 +81,7 @@ export const tlsScanner: Scanner = {
           severity: "medium",
           title: `TLS certificate expires in ${daysLeft} days`,
           detail: "Certificate is close to expiry and may not auto-renew.",
-          risk: "If renewal fails, the site becomes unreachable.",
+          risk: "If renewal fails, clients will be locked out of the site with a browser warning. Automated renewal sometimes breaks silently — this is the warning sign.",
           remediation: "Verify auto-renewal is configured (Let's Encrypt, Cloudflare, etc.).",
         });
       }
@@ -96,7 +96,7 @@ export const tlsScanner: Scanner = {
         severity: "high",
         title: "No HSTS header",
         detail: "Strict-Transport-Security header is missing.",
-        risk: "First visit to the site can be intercepted on public WiFi before the HTTPS redirect. Session cookies and form data exposed.",
+        risk: "The first time someone visits your site — before the browser knows to use HTTPS — the connection is unprotected. On public WiFi (hotels, airports, cafes), an attacker can intercept that first request and steal login cookies or redirect the visitor to a fake version of your site.",
         precedent: getPrecedent("tls-no-hsts"),
         remediation: "Add Strict-Transport-Security: max-age=31536000; includeSubDomains; preload",
       });
