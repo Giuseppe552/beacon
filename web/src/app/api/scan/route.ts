@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { resolve4 } from "node:dns/promises";
 import { scan } from "@beacon/scan";
 import { type Industry, INDUSTRY_PROFILES } from "@beacon/industry";
 import { storeScan, checkRateLimit } from "@/lib/kv";
@@ -9,7 +10,14 @@ export const maxDuration = 30;
 
 const VALID_INDUSTRIES = Object.keys(INDUSTRY_PROFILES) as Industry[];
 
-/** Domains that resolve to internal/private infrastructure. */
+/* ── SSRF Prevention ──────────────────────────────────────────────────
+   Two layers:
+   1. Domain-level blocklist (catches obvious names like localhost)
+   2. DNS resolution check (catches evil.com → 127.0.0.1 rebinding)
+   Both are needed because an attacker who reads this file will try to
+   bypass one layer. The DNS check is the real defence.
+   ──────────────────────────────────────────────────────────────────── */
+
 const BLOCKED_DOMAINS = [
   "localhost",
   "0.0.0.0",
@@ -17,31 +25,57 @@ const BLOCKED_DOMAINS = [
   "metadata.internal",
 ];
 
-/** TLDs and patterns that indicate internal/test targets. */
-const BLOCKED_PATTERNS = [
-  /^127\.\d+\.\d+\.\d+$/,            // IPv4 loopback
-  /^10\.\d+\.\d+\.\d+$/,             // RFC 1918
-  /^172\.(1[6-9]|2\d|3[01])\./,      // RFC 1918
-  /^192\.168\./,                       // RFC 1918
-  /^169\.254\./,                       // link-local / cloud metadata
-  /\.local$/,                          // mDNS
-  /\.internal$/,                       // internal TLDs
-  /\.localhost$/,                      // localhost TLD
+const BLOCKED_DOMAIN_PATTERNS = [
+  /^127\.\d+\.\d+\.\d+$/,
+  /^10\.\d+\.\d+\.\d+$/,
+  /^172\.(1[6-9]|2\d|3[01])\./,
+  /^192\.168\./,
+  /^169\.254\./,
+  /\.local$/,
+  /\.internal$/,
+  /\.localhost$/,
 ];
+
+/** Check if a resolved IP is private/internal. */
+function isPrivateIp(ip: string): boolean {
+  return (
+    ip.startsWith("127.") ||
+    ip.startsWith("10.") ||
+    ip.startsWith("0.") ||
+    ip.startsWith("169.254.") ||
+    ip.startsWith("192.168.") ||
+    /^172\.(1[6-9]|2\d|3[01])\./.test(ip) ||
+    ip === "::1" ||
+    ip.startsWith("fc00:") ||
+    ip.startsWith("fd") ||
+    ip.startsWith("fe80:")
+  );
+}
 
 function cleanDomain(raw: string): string | null {
   let d = raw.trim().toLowerCase();
   d = d.replace(/^https?:\/\//, "");
   d = d.replace(/\/.*$/, "");
   d = d.replace(/^www\./, "");
-  // Must have at least one dot (rejects "localhost", bare hostnames)
   if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(d)) {
     return null;
   }
-  // Block internal/private targets (SSRF prevention)
   if (BLOCKED_DOMAINS.includes(d)) return null;
-  if (BLOCKED_PATTERNS.some((p) => p.test(d))) return null;
+  if (BLOCKED_DOMAIN_PATTERNS.some((p) => p.test(d))) return null;
   return d;
+}
+
+/** Resolve domain and verify all IPs are public. Catches DNS rebinding. */
+async function verifyPublicDns(domain: string): Promise<boolean> {
+  try {
+    const ips = await resolve4(domain);
+    if (ips.length === 0) return false;
+    return ips.every((ip) => !isPrivateIp(ip));
+  } catch {
+    // DNS resolution failed — domain doesn't exist or no A records.
+    // Let the scanner handle this gracefully (it has its own error handling).
+    return true;
+  }
 }
 
 export async function POST(req: Request) {
@@ -49,11 +83,17 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid domain" }, { status: 400 });
   }
 
   const domain = cleanDomain(body.domain ?? "");
   if (!domain) {
+    return NextResponse.json({ error: "Invalid domain" }, { status: 400 });
+  }
+
+  // DNS rebinding check — resolve the domain and verify IPs are public
+  const isPublic = await verifyPublicDns(domain);
+  if (!isPublic) {
     return NextResponse.json({ error: "Invalid domain" }, { status: 400 });
   }
 
@@ -71,7 +111,7 @@ export async function POST(req: Request) {
     );
   }
 
-  // Rate limit by domain: 10 scans per hour
+  // Rate limit by domain: 10 scans per hour (prevents using beacon to harass a target)
   const domainAllowed = await checkRateLimit(`rl:dom:${domain}`, 10, 3600);
   if (!domainAllowed) {
     return NextResponse.json(
@@ -86,8 +126,9 @@ export async function POST(req: Request) {
     await storeScan(id, report);
 
     return NextResponse.json({ id, report });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : "Scan failed";
-    return NextResponse.json({ error: msg }, { status: 500 });
+  } catch {
+    // Don't leak internal error messages — attacker reads source and knows
+    // what errors to trigger to probe the environment.
+    return NextResponse.json({ error: "Scan failed" }, { status: 500 });
   }
 }
