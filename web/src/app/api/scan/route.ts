@@ -9,15 +9,38 @@ export const maxDuration = 30;
 
 const VALID_INDUSTRIES = Object.keys(INDUSTRY_PROFILES) as Industry[];
 
+/** Domains that resolve to internal/private infrastructure. */
+const BLOCKED_DOMAINS = [
+  "localhost",
+  "0.0.0.0",
+  "metadata.google.internal",
+  "metadata.internal",
+];
+
+/** TLDs and patterns that indicate internal/test targets. */
+const BLOCKED_PATTERNS = [
+  /^127\.\d+\.\d+\.\d+$/,            // IPv4 loopback
+  /^10\.\d+\.\d+\.\d+$/,             // RFC 1918
+  /^172\.(1[6-9]|2\d|3[01])\./,      // RFC 1918
+  /^192\.168\./,                       // RFC 1918
+  /^169\.254\./,                       // link-local / cloud metadata
+  /\.local$/,                          // mDNS
+  /\.internal$/,                       // internal TLDs
+  /\.localhost$/,                      // localhost TLD
+];
+
 function cleanDomain(raw: string): string | null {
   let d = raw.trim().toLowerCase();
   d = d.replace(/^https?:\/\//, "");
   d = d.replace(/\/.*$/, "");
   d = d.replace(/^www\./, "");
-  // Basic domain validation
+  // Must have at least one dot (rejects "localhost", bare hostnames)
   if (!/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$/.test(d)) {
     return null;
   }
+  // Block internal/private targets (SSRF prevention)
+  if (BLOCKED_DOMAINS.includes(d)) return null;
+  if (BLOCKED_PATTERNS.some((p) => p.test(d))) return null;
   return d;
 }
 
