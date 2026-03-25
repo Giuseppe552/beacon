@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0c1017;
+  --bg-subtle: #111620;
+  --bg-elevated: #171d29;
+  --fg: #f0f1f4;
+  --fg-secondary: #c4c8d4;
+  --fg-muted: #8b92a5;
+  --fg-dim: #707e9a;
+
+  --accent: #ff6b35;
+  --accent-glow: rgba(255, 107, 53, 0.15);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+
+  --grade-a: #22c55e;
+  --grade-b: #22c55e;
+  --grade-c: #f59e0b;
+  --grade-d: #ef4444;
+  --grade-f: #ef4444;
+
+  --sev-critical: #ef4444;
+  --sev-high: #ef4444;
+  --sev-medium: #f59e0b;
+  --sev-low: #06b6d4;
+  --sev-info: #8b92a5;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* { cursor: default; }
+a, button, [role="button"], input, select, label { cursor: pointer; }
+input[type="text"], input[type="url"] { cursor: text; }
+
+::selection { background: rgba(255, 107, 53, 0.25); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ff-mono {
+  font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
