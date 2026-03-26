@@ -22,9 +22,14 @@ async function getRedis() {
 
 export async function storeScan(id: string, report: ScanReport): Promise<void> {
   if (hasRedis()) {
-    const redis = await getRedis();
-    // Store the object directly — Upstash serializes/deserializes JSON automatically
-    await redis.set(`scan:${id}`, report, { ex: SCAN_TTL });
+    try {
+      const redis = await getRedis();
+      const json = JSON.stringify(report);
+      await redis.set(`scan:${id}`, json, { ex: SCAN_TTL });
+      console.log(`[kv] stored scan:${id} (${json.length} bytes)`);
+    } catch (err) {
+      console.error("[kv] store error:", err);
+    }
   } else {
     memoryStore.set(`scan:${id}`, {
       data: JSON.stringify(report),
@@ -35,11 +40,19 @@ export async function storeScan(id: string, report: ScanReport): Promise<void> {
 
 export async function getScan(id: string): Promise<ScanReport | null> {
   if (hasRedis()) {
-    const redis = await getRedis();
-    const raw = await redis.get(`scan:${id}`);
-    if (!raw) return null;
-    // Upstash auto-deserializes — raw is already the object
-    return raw as ScanReport;
+    try {
+      const redis = await getRedis();
+      const raw = await redis.get<string>(`scan:${id}`);
+      console.log(`[kv] get scan:${id} → type=${typeof raw}, truthy=${!!raw}`);
+      if (!raw) return null;
+      // We store as JSON string, parse it back
+      if (typeof raw === "string") return JSON.parse(raw);
+      // Upstash may auto-deserialize — handle both cases
+      return raw as unknown as ScanReport;
+    } catch (err) {
+      console.error("[kv] get error:", err);
+      return null;
+    }
   }
 
   const entry = memoryStore.get(`scan:${id}`);
@@ -57,14 +70,18 @@ export async function checkRateLimit(
   windowSeconds: number,
 ): Promise<boolean> {
   if (hasRedis()) {
-    const redis = await getRedis();
-    const current = await redis.incr(key);
-    if (current === 1) {
-      await redis.expire(key, windowSeconds);
+    try {
+      const redis = await getRedis();
+      const current = await redis.incr(key);
+      if (current === 1) {
+        await redis.expire(key, windowSeconds);
+      }
+      return current <= max;
+    } catch (err) {
+      console.error("[kv] rate limit error:", err);
+      return true; // fail open
     }
-    return current <= max;
   }
 
-  // In-memory fallback — always allow in dev
   return true;
 }
