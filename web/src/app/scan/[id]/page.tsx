@@ -4,13 +4,20 @@ import type { ScanReport, Finding, Grade, Severity } from "@beacon/types";
 import { GRADE_EXPLANATIONS, SEVERITY_EXPLANATIONS } from "@beacon/grade";
 import ShareActions from "@/components/report/ShareActions";
 
+export const dynamic = "force-dynamic";
+
 export default async function ScanPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const report = await getScan(id);
+  let report: ScanReport | null = null;
+  try {
+    report = await getScan(id);
+  } catch (err) {
+    console.error("[beacon] getScan error:", err);
+  }
   if (!report) notFound();
 
   return (
