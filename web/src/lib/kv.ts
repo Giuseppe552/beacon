@@ -11,22 +11,53 @@ if (!globalStore.__beaconMemoryStore) {
 }
 const memoryStore = globalStore.__beaconMemoryStore;
 
-function hasRedis(): boolean {
-  return !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+/**
+ * Detect Redis config from env. Supports:
+ * - UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN (direct)
+ * - REDIS_URL (Vercel Marketplace provisioned — derive REST creds from it)
+ */
+function getRedisConfig(): { url: string; token: string } | null {
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    return {
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    };
+  }
+
+  // Parse REDIS_URL: redis://default:TOKEN@HOST:PORT
+  const redisUrl = process.env.REDIS_URL;
+  if (redisUrl) {
+    try {
+      const parsed = new URL(redisUrl);
+      const host = parsed.hostname;
+      const token = parsed.password;
+      if (host && token) {
+        return {
+          url: `https://${host}`,
+          token,
+        };
+      }
+    } catch {
+      // Invalid URL format
+    }
+  }
+
+  return null;
 }
 
 async function getRedis() {
+  const config = getRedisConfig();
+  if (!config) return null;
   const { Redis } = await import("@upstash/redis");
-  return Redis.fromEnv();
+  return new Redis({ url: config.url, token: config.token });
 }
 
 export async function storeScan(id: string, report: ScanReport): Promise<void> {
-  if (hasRedis()) {
+  const redis = await getRedis();
+  if (redis) {
     try {
-      const redis = await getRedis();
       const json = JSON.stringify(report);
       await redis.set(`scan:${id}`, json, { ex: SCAN_TTL });
-      console.log(`[kv] stored scan:${id} (${json.length} bytes)`);
     } catch (err) {
       console.error("[kv] store error:", err);
     }
@@ -39,15 +70,12 @@ export async function storeScan(id: string, report: ScanReport): Promise<void> {
 }
 
 export async function getScan(id: string): Promise<ScanReport | null> {
-  if (hasRedis()) {
+  const redis = await getRedis();
+  if (redis) {
     try {
-      const redis = await getRedis();
       const raw = await redis.get<string>(`scan:${id}`);
-      console.log(`[kv] get scan:${id} → type=${typeof raw}, truthy=${!!raw}`);
       if (!raw) return null;
-      // We store as JSON string, parse it back
       if (typeof raw === "string") return JSON.parse(raw);
-      // Upstash may auto-deserialize — handle both cases
       return raw as unknown as ScanReport;
     } catch (err) {
       console.error("[kv] get error:", err);
@@ -69,9 +97,9 @@ export async function checkRateLimit(
   max: number,
   windowSeconds: number,
 ): Promise<boolean> {
-  if (hasRedis()) {
+  const redis = await getRedis();
+  if (redis) {
     try {
-      const redis = await getRedis();
       const current = await redis.incr(key);
       if (current === 1) {
         await redis.expire(key, windowSeconds);
@@ -79,9 +107,8 @@ export async function checkRateLimit(
       return current <= max;
     } catch (err) {
       console.error("[kv] rate limit error:", err);
-      return true; // fail open
+      return true;
     }
   }
-
   return true;
 }
