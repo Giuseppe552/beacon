@@ -126,9 +126,10 @@ export async function POST(req: Request) {
     await storeScan(id, report);
 
     return NextResponse.json({ id, report });
-  } catch {
-    // Don't leak internal error messages — attacker reads source and knows
-    // what errors to trigger to probe the environment.
+  } catch (err) {
+    // In production, log the real error server-side but return a generic message.
+    // The specific error is visible in Vercel function logs, not to the client.
+    console.error("[beacon] scan error:", err instanceof Error ? err.message : err);
     return NextResponse.json({ error: "Scan failed" }, { status: 500 });
   }
 }

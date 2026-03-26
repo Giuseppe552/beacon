@@ -2,8 +2,7 @@ import type { ScanReport } from "@beacon/types";
 
 const SCAN_TTL = 7 * 24 * 60 * 60; // 7 days
 
-/** In-memory fallback when Redis isn't configured. Persisted on globalThis so
- *  it survives module re-evaluation in dev (API route and page render share it). */
+/** In-memory fallback when Redis isn't configured. */
 const globalStore = globalThis as unknown as {
   __beaconMemoryStore?: Map<string, { data: string; expires: number }>;
 };
@@ -22,14 +21,13 @@ async function getRedis() {
 }
 
 export async function storeScan(id: string, report: ScanReport): Promise<void> {
-  const json = JSON.stringify(report);
-
   if (hasRedis()) {
     const redis = await getRedis();
-    await redis.set(`scan:${id}`, json, { ex: SCAN_TTL });
+    // Store the object directly — Upstash serializes/deserializes JSON automatically
+    await redis.set(`scan:${id}`, report, { ex: SCAN_TTL });
   } else {
     memoryStore.set(`scan:${id}`, {
-      data: json,
+      data: JSON.stringify(report),
       expires: Date.now() + SCAN_TTL * 1000,
     });
   }
@@ -38,9 +36,10 @@ export async function storeScan(id: string, report: ScanReport): Promise<void> {
 export async function getScan(id: string): Promise<ScanReport | null> {
   if (hasRedis()) {
     const redis = await getRedis();
-    const raw = await redis.get<string>(`scan:${id}`);
+    const raw = await redis.get(`scan:${id}`);
     if (!raw) return null;
-    return typeof raw === "string" ? JSON.parse(raw) : raw as unknown as ScanReport;
+    // Upstash auto-deserializes — raw is already the object
+    return raw as ScanReport;
   }
 
   const entry = memoryStore.get(`scan:${id}`);
