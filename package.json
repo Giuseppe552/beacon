@@ -19,8 +19,7 @@
     "node": ">=22.0.0"
   },
   "dependencies": {
-    "node-html-parser": "^7.0.1",
-    "whois": "^2.16.1"
+    "node-html-parser": "^7.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.15.0",
