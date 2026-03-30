@@ -99,35 +99,42 @@ export async function scan(domain: string, opts: ScanOptions = {}): Promise<Scan
   ctx.industry = industry;
   log(`fetched ${ctx.url} (${ctx.statusCode}), ${ctx.html.length} bytes`);
 
+  // Run all scanners concurrently — they share ctx but don't depend on each other
+  progress({ phase: "scanner", label: "Scanning", current: 0, total: ALL_SCANNERS.length });
+
+  const results = await Promise.all(
+    ALL_SCANNERS.map(async (scanner, si) => {
+      log(`running ${scanner.name}...`);
+      const st = performance.now();
+      let findings: Finding[];
+      try {
+        findings = await scanner.scan(ctx);
+      } catch (err) {
+        findings = [
+          {
+            id: `error-${scanner.category}`,
+            category: scanner.category,
+            severity: "info",
+            title: `${scanner.name} scanner error`,
+            detail: err instanceof Error ? err.message : "Unknown error",
+            risk: "This scanner could not complete. Results may be incomplete.",
+          },
+        ];
+      }
+
+      findings = applyIndustryContext(findings, industry);
+      const durationMs = Math.round(performance.now() - st);
+      log(`  ${scanner.name}: ${findings.length} findings (${durationMs}ms)`);
+      progress({ phase: "scanner", label: scanner.name, current: si + 1, total: ALL_SCANNERS.length });
+
+      return { scanner, findings, durationMs };
+    }),
+  );
+
   const allFindings: Finding[] = [];
   const categories: CategoryResult[] = [];
 
-  for (let si = 0; si < ALL_SCANNERS.length; si++) {
-    const scanner = ALL_SCANNERS[si];
-    progress({ phase: "scanner", label: scanner.name, current: si + 1, total: ALL_SCANNERS.length });
-    log(`running ${scanner.name}...`);
-    const st = performance.now();
-    let findings: Finding[];
-    try {
-      findings = await scanner.scan(ctx);
-    } catch (err) {
-      findings = [
-        {
-          id: `error-${scanner.category}`,
-          category: scanner.category,
-          severity: "info",
-          title: `${scanner.name} scanner error`,
-          detail: err instanceof Error ? err.message : "Unknown error",
-          risk: "This scanner could not complete. Results may be incomplete.",
-        },
-      ];
-    }
-
-    // Apply industry severity bumps and risk suffixes
-    findings = applyIndustryContext(findings, industry);
-
-    const durationMs = Math.round(performance.now() - st);
-
+  for (const { scanner, findings, durationMs } of results) {
     categories.push({
       category: scanner.category,
       grade: computeGrade(findings),
@@ -135,7 +142,6 @@ export async function scan(domain: string, opts: ScanOptions = {}): Promise<Scan
       durationMs,
     });
     allFindings.push(...findings);
-    log(`  ${scanner.name}: ${findings.length} findings (${durationMs}ms)`);
   }
 
   const summary = {

@@ -6,7 +6,7 @@ import { storeScan, checkRateLimit } from "@/lib/kv";
 import { nanoid } from "nanoid";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 const VALID_INDUSTRIES = Object.keys(INDUSTRY_PROFILES) as Industry[];
 

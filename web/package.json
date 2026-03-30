@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "cd .. && npm install --omit=dev && cd web && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
