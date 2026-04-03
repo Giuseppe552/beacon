@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ScanForm from "@/components/ScanForm";
+import ScanTabs from "@/components/ScanTabs";
 import FAQ from "@/components/FAQ";
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export default function Home() {
             that caused real data breaches at other businesses.
           </p>
         </div>
-        <ScanForm />
+        <ScanTabs />
         <p className="mt-6 text-xs text-[var(--fg-dim)] text-center max-w-sm">
           43% of UK businesses experienced a cyber breach last year.
           Most didn&apos;t know until someone else told them.
