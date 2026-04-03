@@ -37,6 +37,10 @@ export default function Home() {
             Source: UK DSIT Cyber Breaches Survey, 2025
           </span>
         </p>
+        <p className="mt-3 text-[10px] text-[var(--fg-dim)]/50 text-center max-w-xs">
+          Free tool. No signup. No data stored beyond 7 days.
+          Runs on limited infrastructure — be patient with slow scans.
+        </p>
       </div>
 
       {/* ── Content sections ───────────────────────────── */}

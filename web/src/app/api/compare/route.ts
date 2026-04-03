@@ -6,10 +6,10 @@ import { storeScan, checkRateLimit } from "@/lib/kv";
 import { nanoid } from "nanoid";
 
 export const runtime = "nodejs";
-export const maxDuration = 120; // multiple scans take longer
+export const maxDuration = 60; // hobby plan limit
 
 const VALID_INDUSTRIES = Object.keys(INDUSTRY_PROFILES) as Industry[];
-const MAX_DOMAINS = 4;
+const MAX_DOMAINS = 3; // 4 domains risks timeout on 60s hobby plan
 const MIN_DOMAINS = 2;
 
 const BLOCKED_DOMAINS = [
@@ -95,9 +95,9 @@ export async function POST(req: Request) {
     ? (body.industry as Industry)
     : "general";
 
-  // rate limit by IP: comparisons cost more, so 5 per hour
+  // rate limit by IP: comparisons run 2-3 scans each, so 3 per hour
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
-  const ipAllowed = await checkRateLimit(`rl:cmp:${ip}`, 5, 3600);
+  const ipAllowed = await checkRateLimit(`rl:cmp:${ip}`, 3, 3600);
   if (!ipAllowed) {
     return NextResponse.json(
       { error: "Too many comparisons. Try again in an hour." },
@@ -106,10 +106,16 @@ export async function POST(req: Request) {
   }
 
   try {
-    // scan all domains concurrently
-    const results = await Promise.allSettled(
-      unique.map((d) => scan(d, { industry })),
+    // 50s timeout — hobby plan kills at 60s, need margin for Redis storage
+    const timeout = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("timeout")), 50_000),
     );
+
+    // scan all domains concurrently, race against timeout
+    const results = await Promise.race([
+      Promise.allSettled(unique.map((d) => scan(d, { industry }))),
+      timeout,
+    ]) as PromiseSettledResult<Awaited<ReturnType<typeof scan>>>[];
 
     const reports: Array<{ domain: string; report: ReturnType<typeof scan> extends Promise<infer R> ? R : never; error?: string }> = [];
 
@@ -171,7 +177,16 @@ export async function POST(req: Request) {
 
     return NextResponse.json(comparison);
   } catch (err) {
-    console.error("[beacon] compare error:", err instanceof Error ? err.message : err);
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[beacon] compare error:", msg);
+
+    if (msg === "timeout") {
+      return NextResponse.json(
+        { error: "Comparison timed out. Try comparing fewer domains, or scan them individually." },
+        { status: 504 },
+      );
+    }
+
     return NextResponse.json({ error: "Comparison failed" }, { status: 500 });
   }
 }

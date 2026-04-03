@@ -12,7 +12,7 @@ const INDUSTRIES = [
 ];
 
 export default function CompareForm() {
-  const [domains, setDomains] = useState(["", "", ""]);
+  const [domains, setDomains] = useState(["", ""]);
   const [industry, setIndustry] = useState("general");
   const [scanning, setScanning] = useState(false);
   const [error, setError] = useState("");
@@ -101,7 +101,7 @@ export default function CompareForm() {
           </div>
         ))}
 
-        {domains.length < 4 && (
+        {domains.length < 3 && (
           <button
             type="button"
             onClick={addDomain}
@@ -147,7 +147,8 @@ export default function CompareForm() {
         <div className="mt-5 ml-7 rounded-lg border border-[var(--accent)]/20 bg-[var(--bg-subtle)] px-4 py-3">
           <p className="text-sm text-[var(--fg-secondary)]">{progress}</p>
           <p className="mt-1 text-xs text-[var(--fg-dim)]">
-            This takes 10-20 seconds. Each site is scanned independently.
+            This takes 10-30 seconds. Each site is scanned independently against real servers.
+            Free tool, limited infrastructure — please be patient.
           </p>
         </div>
       )}

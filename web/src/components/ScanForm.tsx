@@ -155,7 +155,7 @@ export default function ScanForm() {
             ))}
           </div>
           <p className="mt-3 text-xs text-[var(--fg-dim)]">
-            This usually takes 3–6 seconds. We&apos;re checking real servers, not running a quick header scan.
+            Usually 3–10 seconds. Checking real servers, not running a quick header scan.
           </p>
         </div>
       )}
