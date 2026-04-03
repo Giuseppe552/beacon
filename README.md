@@ -69,7 +69,7 @@ npx tsx src/cli.ts example.com --json > report.json
 
 ## Web app
 
-The `web/` directory contains a Next.js app that wraps the scanning engine with a browser UI. Landing page, scan form, shareable report URLs.
+The `web/` directory contains a Next.js app that wraps the scanning engine with a browser UI. Two modes: single scan and competitor comparison.
 
 ```bash
 cd web
@@ -78,6 +78,21 @@ npm run dev
 ```
 
 Deployed at [beacon.giuseppegiona.com](https://beacon.giuseppegiona.com).
+
+### Competitor comparison
+
+Scan your site alongside 2 competitors. See grades side by side, per-category breakdown, and a ranking. Same scanning methodology on all domains — passive analysis of publicly visible configuration.
+
+The compare endpoint runs scans concurrently and produces a shareable report at `/compare/[id]` showing: ranked domain list by grade, category-by-category table (Encryption, Headers, Email Auth, Exposed Files, Third-Party, Forms, Cookies), per-domain findings summary with severity counts, and drill-down links to each full report.
+
+### Infrastructure
+
+Free tool on Vercel hobby plan. Rate limited to keep it sustainable:
+- Single scan: 5 per hour per IP, 3 per hour per domain
+- Comparison: 3 per hour per IP, max 3 domains
+- 60-second function timeout (hobby plan limit)
+- Scan results stored 7 days in Upstash Redis
+- No signup, no data collection beyond scan results
 
 ## Scanners
 
